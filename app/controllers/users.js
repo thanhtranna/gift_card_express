@@ -224,8 +224,8 @@ exports.resetPassword = (req, res) => {
                 }
             }, (err, user) => {
                 if (!user) {
-                    req.flash('warning', 'Password reset token is invalid or has expired.');
-                    console.log('Req flash warning: ', req.flash('warning'));
+                    req.flash('errors', 'Password reset token is invalid or has expired.');
+                    console.log('Req flash errors: ', req.flash('errors'));
                     return res.redirect('back');
                 }
 

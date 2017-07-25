@@ -18,7 +18,7 @@ block content
                 each user, i in users
                     tbody
                         tr
-                            input(type="hidden", name="_csrf", value="#{csrf_token}")
+                            input(type="hidden", id="#{user._id}", name="_csrf", value="#{csrf_token}")
                             th(scope='row') #{ i }
                             td #{ user.email }
                             td #{ user.name }
@@ -37,6 +37,9 @@ block content
                 var value = $(this).data("id") ;
                 var choose = confirm("Are you want to delete!");
                 if (choose) {
+                    $.ajaxSetup({
+                        headers: {"X-CSRF-Token": $("#"+value).val()}
+                    });
                     $.ajax({
                         method: "POST",
                         url: "/admin/user/delete",
