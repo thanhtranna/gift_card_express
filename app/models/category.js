@@ -5,17 +5,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TransactionSchema = new mongoose.Schema({
+const CategorySchema = new mongoose.Schema({
     order: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Order'
-        }
-    ],
-    user: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
         }
     ],
     giftcard: [
@@ -24,17 +18,20 @@ const TransactionSchema = new mongoose.Schema({
             ref: 'GiftCard'
         }
     ],
-    descriptions: {
-        type: String,
-        required: true
+    name: {
+        type: String
+    },
+    description: {
+        type: String
+    },
+    parent: {
+        type: Schema.Types.ObjectId
     },
     created_at: {
         type: Date,
         default: Date.now
     },
-    updated_at: {
-        type: Date
-    }
-}, { collection: 'Transaction' } );
+    updated_at: Date
+}, { collection: 'Category' });
 
-module.exports = mongoose.model('Transaction', TransactionSchema);
+module.exports = mongoose.model('Category', CategorySchema);

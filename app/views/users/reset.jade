@@ -1,0 +1,92 @@
+//Created by tranthanhit on 25/07/2017.
+
+extends ../layouts/default
+
+block main
+    h3= title
+
+block content
+
+    .container
+        .row
+            .col-md-6.col-md-push-3
+                .panel.with-nav-tabs.panel-info
+                    //
+                      <div class="panel-heading">
+                      <h4>Reset Password</h4>
+                      </div>
+                    .panel-body
+                        .tab-content
+                            #login.tab-pane.fade.in.active.register
+                                .container-fluid
+                                    .row
+                                        // Form reset password!
+                                        form#resetpassword(action='', method='POST', role='form')
+                                            input(type="hidden", name="_csrf", value="#{csrf_token}")
+                                            h3.text-center(style='color: #5cb85c;')
+                                                strong  Reset Password
+                                            hr
+                                            - if ( messages.success_messages )
+                                                .message.info
+                                                    span= messages.success_messages
+                                            .row
+                                                .col-xs-12.col-sm-12.col-md-12
+                                                    .form-group
+                                                        .input-group
+                                                            .input-group-addon
+                                                                span.glyphicon.glyphicon-user
+                                                            input#password.form-control(type='password', placeholder='New Password', name='password', data-error='#errorPassword')
+                                                        small#errorPassword(style='color: red;')
+                                            .row
+                                                .col-xs-12.col-sm-12.col-md-12
+                                                    .form-group
+                                                        .input-group
+                                                            .input-group-addon
+                                                                span.glyphicon.glyphicon-lock
+                                                            input#repassword.form-control(type='password', placeholder='Confirm Password', name='repassword', data-error='#errorReTypePassword')
+                                                        small#errorReTypePassword(style='color: red;')
+                                            hr
+                                            .row
+                                                .col-xs-12.col-sm-12.col-md-12
+                                                    button.btn.btn-success.btn-block.btn-lg(type='submit')  Confirm
+    script(type='text/javascript ', src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js ')
+    script(type='text/javascript ').
+        // just for the demos, avoids form submit
+        // jQuery.validator.setDefaults({
+        //     debug: true,
+        //     success: "valid "
+        // });
+        $("#resetpassword ").validate({
+            rules: {
+                password: {
+                    required: true,
+                    maxlength: 30,
+                    minlength: 4
+                },
+                repassword: {
+                    required: true,
+                    equalTo: "#password"
+                }
+            },
+            messages: {
+                password: {
+                    required: "Password field not required! ",
+                    maxlength: "Password field less than 30 characters! ",
+                    minlength: "Password field more than 4 characters! "
+                },
+                repassword: {
+                    required: "ReTypePassword field not required! ",
+                    equalTo: "Password not match!"
+                }
+            },
+            errorElement: "span",
+            errorPlacement: function(error, element) {
+                var placement = $(element).data("error");
+                if (placement) {
+                    $(placement).append(error)
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+

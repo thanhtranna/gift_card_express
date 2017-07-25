@@ -3,7 +3,9 @@
 /*
  * Module dependencies.
  */
-
+const csrf = require('csurf');
+const flash = require('express-flash');
+const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
 const comments = require('../app/controllers/comments');
@@ -28,10 +30,22 @@ const fail = {
 module.exports = function (app, passport) {
   const pauth = passport.authenticate.bind(passport);
 
+  // admin routes
+  app.get('/admin', adminUser.index);
+  app.get('/admin/users', adminUser.users);
+  app.get('/admin/user/edit/:userId', adminUser.editUserById);
+  app.post('/admin/user/edit/:userId', adminUser.updateUserById);
+  app.post('/admin/user/delete', adminUser.deleteUserById);
+
+
   // user routes
   app.get('/login', users.login);
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
+  app.get('/forgot', users.forgot);
+  app.get('/reset/:token', users.reset);
+  app.post('/forgot', users.forgotPassword);
+  app.post('/reset/:token', users.resetPassword);
   app.post('/users', users.create);
   app.post('/users/session',
     pauth('local', {
@@ -114,6 +128,9 @@ module.exports = function (app, passport) {
     // error page
     res.status(500).render('500', { error: err.stack });
   });
+
+  app.use(csrf({ cookie: false }));
+  app.use(flash());
 
   // assume 404 since no middleware responded
   app.use(function (req, res) {

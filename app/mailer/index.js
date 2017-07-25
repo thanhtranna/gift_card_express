@@ -56,7 +56,7 @@ module.exports = {
     };
 
     // for apple push notifications
-    /*notifier.use({
+    /* notifier.use({
       APN: true
       parseChannels: ['USER_' + author._id.toString()]
     })*/

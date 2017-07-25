@@ -8,19 +8,19 @@ const OrderSchema = new mongoose.Schema({
     user: [
         {
             type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: 'User'
         }
     ],
     giftcard: [
         {
             type: Schema.Types.ObjectId,
-            ref: "GiftCard"
+            ref: 'GiftCard'
         }
     ],
     transaction: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Transaction"
+            ref: 'Transaction'
         }
     ],
     price: {
@@ -34,6 +34,6 @@ const OrderSchema = new mongoose.Schema({
     updated_at: {
         type: Date
     }
-}, {collection: "Order"});
+}, { collection: 'Order' });
 
 module.exports = mongoose.model('Order', OrderSchema);
