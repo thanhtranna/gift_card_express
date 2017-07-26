@@ -8,6 +8,7 @@ const flash = require('express-flash');
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
+const categories = require('../app/controllers/categories');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -92,6 +93,15 @@ module.exports = function (app, passport) {
   app.get('/articles/:id/edit', articleAuth, articles.edit);
   app.put('/articles/:id', articleAuth, articles.update);
   app.delete('/articles/:id', articleAuth, articles.destroy);
+
+  // category routes
+  app.get('/categories', categories.index);
+  app.get('/categories/new', categories.new);
+  app.post('/categories', auth.requiresLogin, categories.create);
+  app.get('/categories/:catId', categories.show);
+  app.get('/categories/:catId/edit', categories.edit);
+  app.put('/categories/:catId', categories.update);
+  app.delete('/categories/:catId', categories.destroy);
 
   // home route
   app.get('/', articles.index);

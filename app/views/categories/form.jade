@@ -1,0 +1,48 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    - var action = '/categories'
+    - action += category.isNew ? '' : '/' + category._id
+
+    .row
+        .col-md-8
+            form.form-horizontal(method="post", action=action, role="form")
+
+                input(type="hidden", name="_csrf", value="#{csrf_token}")
+
+                - if (!category.isNew)
+                    input(type="hidden", name="_method", value="PUT")
+
+                .form-group
+                    label.col-sm-2.control-label(for='name') Name
+                    .col-sm-10
+                        input.form-control#name(type='text', name="name", value=category.name, placeholder='Enter the category')
+
+                .form-group
+                    label.col-sm-2.control-label(for='description') Description
+                    .col-sm-10
+                        textarea.form-control#description(rows="5", name="description", placeholder='Enter the Category description')=category.description
+
+                    .form-group
+                        label.col-sm-2.control-label(for='categories') Category
+                        .col-sm-10
+                            select.form-control#categories( name="parent")
+                                option(value = '0') Tất cả
+                                - if (categories.length)
+
+                                    - each item in categories
+                                        - if (item._id + "" == category.parent + "")
+                                            option( selected = true value = "#{item._id}") #{item.name}
+                                        - else
+                                            option( value = "#{item._id}") #{item.name}
+                                - else
+                                    - console.log('ko co')
+
+                .form-group
+                    .col-sm-offset-2.col-sm-10
+                        button.btn.btn-primary(type='submit') Save
+                        | &nbsp;
+                        a.btn(href='/categories', title="cancel") Cancel

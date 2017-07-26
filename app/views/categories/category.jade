@@ -1,0 +1,7 @@
+category.category
+    h3
+        a(href='/categories/#{category._id}') #{category.name}
+    span
+        a(href="/categories/#{category._id}/edit") Edit /
+    span
+        a(href="/categories/delete/#{category._id}") Delete
