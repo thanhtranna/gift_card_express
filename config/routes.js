@@ -8,8 +8,10 @@ const flash = require('express-flash');
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
+
 const categories = require('../app/controllers/categories');
 const giftcards = require('../app/controllers/giftcards');
+
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -31,6 +33,7 @@ const fail = {
  */
 
 module.exports = function (app, passport) {
+
 
   const pauth = passport.authenticate.bind(passport);
 
@@ -155,31 +158,8 @@ module.exports = function (app, passport) {
   app.use(flash());
 
     /**
-     * Error handling
+     * -----------------------------
      */
-
-    app.use(function (err, req, res, next) {
-        // treat as 404
-        if (err.message
-            && (~err.message.indexOf('not found')
-            || (~err.message.indexOf('Cast to ObjectId failed')))) {
-            return next();
-        }
-
-        console.error(err.stack);
-
-        if (err.stack.includes('ValidationError')) {
-            res.status(422).render('422', { error: err.stack });
-            return;
-        }
-
-        // error page
-        res.status(500).render('500', { error: err.stack });
-    });
-
-    app.use(csrf({ cookie: false }));
-    app.use(flash());
-
     // assume 404 since no middleware responded
     app.use(function (req, res) {
         const payload = {

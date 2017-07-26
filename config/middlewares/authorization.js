@@ -34,6 +34,7 @@ exports.admin = {
     hasAuthorization: function (req, res, next) {
       console.log('Req user: ',req.user);
         if ( req.user && req.user.admin == true ) {
+            req.session.returnTo = '/admin';
             next();
         } else {
             req.flash('info', 'You are not authorized');

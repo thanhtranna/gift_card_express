@@ -45,11 +45,11 @@ block content
                         url: "/admin/user/delete",
                         data: { userId: value }
                     })
-                        .done(function(msg) {
-                            console.log( "Successfully : " + msg );
-                            alert("Delete successfully!!")
-                            location.reload();
-                        });
+                    .done(function(msg) {
+                        console.log( "Successfully : " + msg );
+                        alert("Delete successfully!!")
+                        location.reload();
+                    });
                 }
             })
         });
