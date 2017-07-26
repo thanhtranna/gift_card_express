@@ -26,7 +26,6 @@ const UserSchema = new Schema({
     provider: { type: String, default: '' },
     hashed_password: { type: String, default: '' },
     salt: { type: String, default: '' },
-    fullName: String,
     admin: {
         type: Boolean,
         default: false
@@ -42,22 +41,22 @@ const UserSchema = new Schema({
         default: Date.now
     },
     updated_at: Date,
-    giftCard: [
+    giftcard: [
         {
             type: Schema.Types.ObjectId,
             ref: 'GiftCard'
         }
     ],
-    orderBid: [
+    transaction: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'OrderBid'
+            ref: 'Transaction'
         }
     ],
-    orderAsk: [
+    order: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'OrderAsk'
+            ref: 'Order'
         }
     ],
     facebook: {},
@@ -112,10 +111,10 @@ UserSchema.path('email').validate(function (email, fn) {
     } else fn(true);
 }, 'Email already exists');
 
-UserSchema.path('hashed_password').validate(function (hashed_password) {
-    if (this.skipValidation()) return true;
-    return hashed_password.length && this._password.length;
-}, 'Password cannot be blank');
+// UserSchema.path('hashed_password').validate(function (hashed_password) {
+//     if (this.skipValidation()) return true;
+//     return hashed_password.length && this._password.length;
+// }, 'Password cannot be blank');
 
 
 /**
@@ -205,7 +204,7 @@ UserSchema.statics = {
      */
 
     load: function (options, cb) {
-        options.select = options.select || 'name username';
+        options.select = options.select || 'name admin';
         return this.findOne(options.criteria)
             .select(options.select)
             .exec(cb);
