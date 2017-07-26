@@ -1,0 +1,21 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    h3= giftcard.name
+    p= giftcard.description
+    p= giftcard.minPrice
+    p= giftcard.maxPrice
+    p= giftcard.expiresAt
+    -if (giftcard.status == 0)
+        p Tinh trang Chua public
+    - else if (giftcard.status == 1)
+        p Tinh trang Da public
+    - else
+        p Tinh trang Da ban
+    - if (giftcard.authGift == 0)
+        p Gift card chua xac thuc
+    - else
+        p Gift card da xac thuc

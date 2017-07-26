@@ -1,0 +1,64 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    - var action = '/giftcards'
+    - action += giftcard.isNew ? '' : '/' + giftcard._id
+    .row
+        .col-md-8
+            form.form-horizontal(method="post", action=action, role="form")
+
+                input(type="hidden", name="_csrf", value="#{csrf_token}")
+
+                - if (!giftcard.isNew)
+                    input(type="hidden", name="_method", value="PUT")
+
+                .form-group
+                    label.col-sm-2.control-label(for='name') Name
+                    .col-sm-10
+                        input.form-control#name(type='text', name="name", value=giftcard.name, placeholder='Enter the gift card')
+
+                .form-group
+                    label.col-sm-2.control-label(for='categories') Category
+                    .col-sm-10
+                        select.form-control#categories( name="category")
+                            - if (categories.length)
+                                - each item in categories
+                                    - if (item.parent != null )
+                                        option( value = "#{item._id}") --- #{item.name}
+                                    - else
+                                        option( value = "#{item._id}") #{item.name}
+                            - else
+                                - console.log('ko co')
+
+                .form-group
+                    label.col-sm-2.control-label(for='file') Image
+                    .col-sm-10
+                        input.form-control#file(type='file', name="image")
+
+                .form-group
+                    label.col-sm-2.control-label(for='description') Description
+                    .col-sm-10
+                        textarea.form-control#description(rows="5", name="description", placeholder='Enter the Category description')=giftcard.description
+
+                .form-group
+                    label.col-sm-2.control-label(for='maxPrice') Max price
+                    .col-sm-10
+                        input.form-control#maxPrice(type='text', name="maxPrice", value=giftcard.maxPrice, placeholder='Enter the max price')
+
+                .form-group
+                    label.col-sm-2.control-label(for='minPrice') Minprice
+                    .col-sm-10
+                        input.form-control#minPrice(type='text', name="minPrice", value=giftcard.minPrice, placeholder='Enter the min price')
+                .form-group
+                    label.col-sm-2.control-label(for='expiresAt') Expires Date
+                    .col-sm-10
+                        input.form-control#expiresAt(type='date', name="expiresAt", value="#{giftcard.expiresAt}", placeholder='Enter the min price')
+
+                .form-group
+                    .col-sm-offset-2.col-sm-10
+                        button.btn.btn-primary(type='submit') Save
+                        | &nbsp;
+                        a.btn(href='/giftcards', title="cancel") Cancel
