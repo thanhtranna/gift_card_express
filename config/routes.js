@@ -9,6 +9,7 @@ const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
 const categories = require('../app/controllers/categories');
+const giftcards = require('../app/controllers/giftcards');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -29,14 +30,17 @@ const fail = {
  */
 
 module.exports = function (app, passport) {
+
   const pauth = passport.authenticate.bind(passport);
 
   // admin routes
   app.get('/admin', adminUser.index);
   app.get('/admin/users', adminUser.users);
+
   app.get('/admin/listgift', adminUser.listgift);
   app.get('/admin/listgift/:giftId', adminUser.show);
   app.get('/admin/transaction', adminUser.transaction);
+
   app.get('/admin/user/edit/:userId', adminUser.editUserById);
   app.post('/admin/user/edit/:userId', adminUser.updateUserById);
   app.post('/admin/user/delete', adminUser.deleteUserById);
@@ -105,6 +109,7 @@ module.exports = function (app, passport) {
   app.get('/categories/:catId/edit', categories.edit);
   app.put('/categories/:catId', categories.update);
   app.delete('/categories/:catId', categories.destroy);
+
   // home route
   app.get('/', articles.index);
 
@@ -153,6 +158,7 @@ module.exports = function (app, passport) {
     if (req.accepts('json')) return res.status(404).json(payload);
     res.status(404).render('404', payload);
   });
+
 };
 
 

@@ -13,7 +13,9 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
           a(href="/articles/new", title="new article") New
         - if (req.isAuthenticated())
           li
-            a(href="/categories", title="new article") Category
+            a(href="/categories", title="List category") Category
+          li
+            a(href="/giftcards", title="List gift card") Gift card
           li
             a(href="/users/"+req.user.id, title="Profile") Profile
             li
