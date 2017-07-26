@@ -97,8 +97,15 @@ GiftCardSchema.statics = {
      */
 
     list: function (options) {
-        return this.find(options).exec();
+        return this.find(options)
+            .populate('User','Categories')
+            .exec();
+
+    },
+    load: function (id){
+        return this.findOne({ _id: id }).exec();
     }
+
 };
 
 module.exports = mongoose.model('GiftCard', GiftCardSchema);
