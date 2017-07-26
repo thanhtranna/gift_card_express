@@ -8,6 +8,7 @@ const flash = require('express-flash');
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
+const categories = require('../app/controllers/categories');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -29,6 +30,7 @@ const fail = {
  */
 
 module.exports = function (app, passport) {
+
     const pauth = passport.authenticate.bind(passport);
 
     // admin routes
