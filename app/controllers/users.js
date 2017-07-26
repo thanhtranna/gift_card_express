@@ -63,6 +63,7 @@ exports.create = async(function* (req, res) {
 
 exports.show = function (req, res) {
   const user = req.profile;
+  console.log(user);
   respond(res, 'users/show', {
     title: user.name,
     user: user
@@ -147,7 +148,7 @@ exports.forgotPassword = (req, res, next) => {
                     console.log('No account from database!!');
                     req.flash('warning', 'No account with that email address exists.');
                     console.log('Req flash warning: ', req.flash('warning'));
-                    // Response and redirect
+                    // Response and redirect webpage.
                     return respondOrRedirect({ req, res }, '/forgot', {}, {
                         type: 'warning',
                         text: 'No account with that email address exists.'
@@ -192,7 +193,7 @@ exports.forgotPassword = (req, res, next) => {
     ], (err, message) => {
         if (err)
             return next(err);
-        // Response and redirect
+        // Response and redirect webpage.
         respondOrRedirect({ req, res }, '/forgot', {}, {
             type: 'success',
             text: message
@@ -311,12 +312,13 @@ exports.session = login;
  */
 
 function login (req, res) {
+    console.log('Req session: ');
+    console.log(req.session);
   const redirectTo = req.session.returnTo
     ? req.session.returnTo
     : '/';
   delete req.session.returnTo;
   // res.redirect(redirectTo);
-  console.log('123123');
   respondOrRedirect({ req, res }, redirectTo, {}, {
      type: 'success',
      text: 'Login successfully'

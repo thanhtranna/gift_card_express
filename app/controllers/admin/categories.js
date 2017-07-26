@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
-const { respond, respondOrRedirect } = require('../utils');
+const { respond, respondOrRedirect } = require('../../utils');
 const Categories = mongoose.model('Categories');
 
 
 exports.index = async(function* (req, res) {
     const options = {};
     const categories = yield Categories.list(options);
-    respond(res, 'categories/index', {
+    respond(res, 'admin/categories/index', {
         title: 'List Categories',
         categories: categories,
     });
@@ -22,7 +22,7 @@ exports.new = async(function* (req, res) {
         parent: null
     };
     const categories = yield Categories.list(options);
-    respond(res, 'categories/new', {
+    respond(res, 'admin/categories/new', {
         title: 'Create Categories',
         categories: categories,
         category: new Categories()
@@ -48,7 +48,7 @@ exports.create = async( function* (req, res ) {
             });
         }
     } catch (err) {
-        respond(res, 'category/new', {
+        respond(res, 'admin/category/new', {
             title: 'New category',
             errors: [err.toString()],
             category
@@ -62,7 +62,7 @@ exports.create = async( function* (req, res ) {
  */
 exports.show = async(function* (req, res) {
     const category = yield Categories.load(req.param('catId'));
-    respond(res, 'categories/show', {
+    respond(res, 'admin/categories/show', {
         title: 'Show category detail',
         category: category
     });
@@ -78,7 +78,7 @@ exports.edit = async(function* (req, res) {
         parent: null
     };
     const categories = yield Categories.list(options);
-    respond(res, 'categories/edit', {
+    respond(res, 'admin/categories/edit', {
         title: 'Edit ' + category.name,
         category: category,
         categories: categories

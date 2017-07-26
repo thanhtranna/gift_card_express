@@ -8,7 +8,7 @@ const flash = require('express-flash');
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
-const categories = require('../app/controllers/categories');
+const categories = require('../app/controllers/admin/categories');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -37,8 +37,19 @@ module.exports = function (app, passport) {
     app.get('/admin', adminAuth, adminUser.index);
     app.get('/admin/users', adminAuth, adminUser.users);
     app.get('/admin/user/edit/:userId', adminAuth, adminUser.editUserById);
+    app.get('/admin/user/profile', adminAuth, adminUser.profileAdmin);
+    app.post('/admin/user/profile', adminAuth, adminUser.updateAdminById);
     app.post('/admin/user/edit/:userId', adminAuth, adminUser.updateUserById);
     app.post('/admin/user/delete', adminAuth, adminUser.deleteUserById);
+
+    // category routes. admin permission
+    app.get('/admin/categories', adminAuth, categories.index);
+    app.get('/admin/categories/new', adminAuth, categories.new);
+    app.post('/admin/categories', adminAuth, categories.create);
+    app.get('/admin/categories/:catId', adminAuth, categories.show);
+    app.get('/admin/categories/:catId/edit', adminAuth, categories.edit);
+    app.put('/admin/categories/:catId', adminAuth, categories.update);
+    app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
 
 
     // user routes
@@ -95,15 +106,6 @@ module.exports = function (app, passport) {
     app.get('/articles/:id/edit', articleAuth, articles.edit);
     app.put('/articles/:id', articleAuth, articles.update);
     app.delete('/articles/:id', articleAuth, articles.destroy);
-
-    // category routes
-    app.get('/categories', categories.index);
-    app.get('/categories/new', categories.new);
-    app.post('/categories', auth.requiresLogin, categories.create);
-    app.get('/categories/:catId', categories.show);
-    app.get('/categories/:catId/edit', categories.edit);
-    app.put('/categories/:catId', categories.update);
-    app.delete('/categories/:catId', categories.destroy);
 
     // home route
     app.get('/', articles.index);

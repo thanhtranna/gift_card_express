@@ -13,7 +13,7 @@ const User = mongoose.model('User');
 
 exports.index = (req, res) => {
     // Response and render page.
-    respond(res, 'admin/user/index', {
+    respond(res, 'admin/index', {
         title: 'Admin Index'
     });
 };
@@ -52,6 +52,93 @@ exports.editUserById = (req, res) => {
                     // Response and render a webpage.
                     respond(res, 'admin/user/edit-user', {
                         title: 'Edit User',
+                        user: user
+                    });
+                } else {
+                    // Redirect page.
+                    respondOrRedirect({ req, res }, '/admin/users', {}, {
+                        type: 'success',
+                        text: 'Edit user successfully'
+                    });
+                }
+            }
+        );
+    } else {
+        // res.redirect('admin/users');
+        respondOrRedirect({ req, res }, '/admin/users', {}, {
+            type: 'warning',
+            text: 'Cannot find id user'
+        });
+    }
+};
+
+/**
+ * Update information Admin by id.
+ * Method: POST
+ */
+
+exports.updateAdminById = (req, res) => {
+    // Handle id admin user.
+    let userId = req.body.id;
+    if (userId) {
+        // Service find user by id.
+        User.findOne({
+                _id: userId
+            }, (err, user) => {
+                console.log(user);
+                if (!err && user) {
+                    user.name = req.body.name;
+                    // user.admin = req.body.admin == 0 ? false : true ;
+                    user.save((err) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            // res.redirect('/admin/users');
+                            console.log('Update thanh cong!');
+                            respondOrRedirect({ req, res }, '/admin/users', {}, {
+                                type: 'success',
+                                text: 'Update admin information successfully'
+                            });
+                        }
+                    });
+                } else {
+                    // res.redirect('/admin/users');
+                    console.log('Khong tim thay user.');
+                    respondOrRedirect({ req, res }, '/admin/users', {}, {
+                        type: 'errors',
+                        text: 'Cannot found user from database!'
+                    });
+                }
+            }
+        );
+    } else {
+        // res.redirect('/admin/users');
+        respondOrRedirect({ req, res }, '/admin/users', {}, {
+            type: 'warning',
+            text: 'Cannot find id user'
+        });
+    }
+};
+
+
+/**
+ * Show profile admin.
+ * Method: GET
+ */
+
+exports.profileAdmin = (req, res) => {
+    let userId = req.user._id;
+    console.log('ID User: ', userId);
+    if (userId) {
+        // Service find user by id.
+        User.findOne({
+                _id: userId
+            }, (err, user) => {
+                console.log(user);
+                if (!err && user) {
+                    // Response and render a webpage.
+                    respond(res, 'admin/user/profile', {
+                        title: 'Admin Info',
                         user: user
                     });
                 } else {
