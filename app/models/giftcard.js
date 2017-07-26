@@ -1,9 +1,22 @@
+'use strict';
+
 /**
- * Created by tranthanhit on 24/07/2017.
+ * Module dependencies.
  */
 
 const mongoose = require('mongoose');
+// const notify = require('../mailer');
+
+
+
 const Schema = mongoose.Schema;
+
+// const getTags = tags => tags.join(',');
+// const setTags = tags => tags.split(',');
+
+/**
+ * GiftCard Schema
+ */
 
 const GiftCardSchema = new mongoose.Schema({
     transaction: [
@@ -59,5 +72,33 @@ const GiftCardSchema = new mongoose.Schema({
         type: Date
     }
 }, { collection: 'GiftCard' });
+
+/**
+* Validations
+*/
+
+GiftCardSchema.path('maxPrice').required(true, 'Article title cannot be blank');
+GiftCardSchema.path('minPrice').required(true, 'Article body cannot be blank');
+// GiftCardSchema.path('expiresDate').required(true, 'Article body cannot be blank');
+
+
+GiftCardSchema.methods = {
+
+
+    saveGift: function () {
+        return this.save();
+    },
+};
+
+GiftCardSchema.statics = {
+
+    /**
+     * List GiftCard
+     */
+
+    list: function (options) {
+        return this.find(options).exec();
+    }
+};
 
 module.exports = mongoose.model('GiftCard', GiftCardSchema);

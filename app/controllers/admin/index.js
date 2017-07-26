@@ -3,9 +3,11 @@
  */
 
 const mongoose = require('mongoose');
-const {wrap: async} = require('co');
-const {respond} = require('../../utils');
+// const {wrap: async} = require('co');
+// const {respond} = require('../../utils');
 const User = mongoose.model('User');
+const GiftCard = mongoose.model('GiftCard');
+const Transaction = mongoose.model('Transaction');
 
 
 /**
@@ -113,5 +115,34 @@ exports.deleteUserById = (req, res) => {
         } else {
             res.json(400);
         }
+    });
+};
+/**
+ * List GiftCard
+ */
+``
+exports.listgift = (req, res) => {
+    // Call Service list GiftCard.
+    GiftCard.find({}, (err, giftcards) => {
+        console.log(giftcards);
+        res.render('admin/listgift', {
+            title: 'GiftCard',
+            giftcard: giftcards
+        });
+    });
+};
+
+/**
+ * List Transaction
+ */
+``
+exports.transaction = (req, res) => {
+    // Call Service list Transaction.
+    Transaction.find({}, (err, transactions) => {
+        console.log(transactions);
+        res.render('admin/transaction', {
+            title: 'Transaction',
+            transaction: transactions
+        });
     });
 };

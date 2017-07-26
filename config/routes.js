@@ -33,6 +33,8 @@ module.exports = function (app, passport) {
   // admin routes
   app.get('/admin', adminUser.index);
   app.get('/admin/users', adminUser.users);
+  app.get('/admin/listgift', adminUser.listgift);
+  app.get('/admin/transaction', adminUser.transaction);
   app.get('/admin/user/edit/:userId', adminUser.editUserById);
   app.post('/admin/user/edit/:userId', adminUser.updateUserById);
   app.post('/admin/user/delete', adminUser.deleteUserById);
