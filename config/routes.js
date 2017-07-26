@@ -20,7 +20,7 @@ const auth = require('./middlewares/authorization');
 
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
-const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
+// const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
 
 const fail = {
     failureRedirect: '/login'
@@ -108,7 +108,12 @@ module.exports = function (app, passport) {
 
   // gift card route
   app.get('/giftcards', giftcards.index);
-  app.get('/categories/new', giftcards.new);
+  app.get('/giftcards/new', giftcards.new);
+  app.post('/giftcards', auth.requiresLogin, giftcards.create);
+  app.get('/giftcards/:giftId', giftcards.show);
+  app.get('/giftcards/:giftId/edit', giftcards.edit);
+  app.put('/giftcards/:giftId', giftcards.update);
+  app.delete('/giftcards/:giftId', giftcards.destroy);
 
   // home route
   app.get('/', articles.index);
@@ -148,20 +153,6 @@ module.exports = function (app, passport) {
 
   app.use(csrf({ cookie: false }));
   app.use(flash());
-
-  // assume 404 since no middleware responded
-  app.use(function (req, res) {
-      const payload = {
-          url: req.originalUrl,
-          error: 'Not found'
-
-      };
-  });
-    app.use('/admin',
-        passport.authenticate('local'),
-        needsGroup(true)
-    );
-
 
     /**
      * Error handling

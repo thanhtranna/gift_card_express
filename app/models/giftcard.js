@@ -23,8 +23,8 @@ const GiftcardsSchema = new Schema({
     createdAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now },
     expiresAt: { type: Date, default: Date.now },
-    status: { type: Number, default: 0, min: 0 },
-    authGift: { type: Number, default: 0, min: 0 }
+    status: { type: Number, default: 0 },
+    authGift: { type: Number, default: 0 }
 });
 
 /**
@@ -33,7 +33,11 @@ const GiftcardsSchema = new Schema({
  */
 
 GiftcardsSchema.methods = {
-
+    saveGiftcard: function () {
+        // console.log(image);
+        // code upload image
+        return this.save();
+    },
 };
 
 /**
