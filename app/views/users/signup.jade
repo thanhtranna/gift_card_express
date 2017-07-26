@@ -1,18 +1,83 @@
 extends auth
 
 block auth
-  form.form-horizontal.form-signin(action="/users", method="post", role="form")
+  form#signupform.form-horizontal.form-signin(action="/users", method="post", role="form")
     input(type='hidden', name='_csrf', value="#{csrf_token}")
 
-    input#email.form-control(type='text', name="email", placeholder='Email', value=user.email)
+    input#email.form-control(type='text', name="email", placeholder='Email', value=user.email, data-error="#errorEmail")
+    small#errorEmail(style='color: red;')
     br
-    input#name.form-control(type='text', name="name", placeholder='Full name', value=user.name)
+    input#name.form-control(type='text', name="name", placeholder='Full name', value=user.name, data-error="#errorName")
+    small#errorName(style='color: red;')
     br
-    input#password.form-control(type='password', name="password", placeholder='Password')
-
+    input#password.form-control.password(type='password', name="password", placeholder='Password', data-error="#errorPassword")
+    small#errorPassword(style='color: red;')
+    br
+    input#repassword.form-control(type='password', name="repassword", placeholder='Password', data-error="#errorRetypePassword")
+    small#errorRetypePassword(style='color: red;')
+    br
     br
     .text-center
       button.btn.btn-primary(type='submit') Sign up
       br
       br
       a.show-login(href="/login") Log in
+
+  script(type='text/javascript ', src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js ')
+  script(type='text/javascript ').
+      // just for the demos, avoids form submit
+      // jQuery.validator.setDefaults({
+      //     debug: true,
+      //     success: "valid "
+      // });
+      $("#signupform ").validate({
+          rules: {
+              email: {
+                  required: true,
+                  email: true
+              },
+              name: {
+                  required: true,
+                  maxlength: 30,
+                  minlength: 4
+              },
+              password: {
+                  required: true,
+                  maxlength: 20,
+                  minlength: 4
+              },
+              repassword: {
+                  required: true,
+                  equalTo: ".password"
+              }
+          },
+          messages: {
+              email: {
+                  required: "Email field required!",
+                  email: "Please enter email! "
+              },
+              name: {
+                  required: "Fullname field required!",
+                  maxlength: "Password field less than 30 characters! ",
+                  minlength: "Password field more than 4 characters! "
+              },
+              password: {
+                  required: "Password field not required! ",
+                  maxlength: "Password field less than 20 characters! ",
+                  minlength: "Password field more than 4 characters! "
+              },
+              repassword: {
+                  required: "Password field not required! ",
+                  equalTo: "Password not match!"
+              }
+          },
+          errorElement: "span",
+          errorPlacement: function (error, element) {
+              var placement = $(element).data("error");
+              if (placement) {
+                  $(placement).append(error)
+              } else {
+                  error.insertAfter(element);
+              }
+          }
+      });
