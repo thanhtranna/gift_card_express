@@ -1,0 +1,12 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    - if (categories.length)
+        h3
+            a(href="/categories/new") Create new Gift card
+    - else
+        h4.muted No Category.&nbsp;
+            a(href="/giftcards/new") Create one

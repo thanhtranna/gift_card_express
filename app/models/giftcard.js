@@ -1,63 +1,63 @@
+'use strict';
+
 /**
- * Created by tranthanhit on 24/07/2017.
+ * Module dependencies.
  */
 
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
-const GiftCardSchema = new mongoose.Schema({
-    transaction: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Transaction'
-        }
-    ],
-    user: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
-    order: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Order'
-        }
-    ],
-    category: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Category'
-        }
-    ],
-    descriptions: {
-        type: String
-    },
-    image: {
-        type: String
-    },
-    maxPrice: {
-        type: Number
-    },
-    minPrice: {
-        type: Number
-    },
-    expiresDate: {
-        type: Date
-    },
-    status: {
-        type: Number
-    },
-    authGift: {
-        type: Number
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date
-    }
-}, { collection: 'GiftCard' });
+/**
+ * Gift card Schema
+ */
 
-module.exports = mongoose.model('GiftCard', GiftCardSchema);
+const GiftcardsSchema = new Schema({
+    name: { type: String, default: '', trim: true },
+    category: { type: Schema.ObjectId, ref: 'Categories' },
+    image: { type: String, default: '', trim: true },
+    description: { type: String, default: '', trim: true },
+    userCreate: { type : Schema.ObjectId, ref : 'User' },
+    maxPrice: { type: Number, default: 0, min: 0 },
+    minPrice: { type: Number, default: 0, min: 0 },
+    createdAt: { type: Date, default: Date.now },
+    updateAt: { type: Date, default: Date.now },
+    expiresAt: { type: Date, default: Date.now },
+    status: { type: Number, default: 0, min: 0 },
+    authGift: { type: Number, default: 0, min: 0 }
+});
+
+/**
+ * Method
+ * @type {{}}
+ */
+
+GiftcardsSchema.methods = {
+
+};
+
+/**
+ * Statics
+ */
+
+GiftcardsSchema.statics = {
+    /**
+     * Get list gift card
+     * @param options
+     * @returns {Promise|Array|{index: number, input: string}|*}
+     */
+    list: function (options) {
+        return this.find(options).exec();
+    },
+
+    /**
+     * Get gift card by Id
+     * @param id
+     * @returns {Promise}
+     */
+    load: function (id){
+        return this.findOne({ _id: id }).exec();
+    }
+};
+
+mongoose.model('Giftcard', GiftcardsSchema);
