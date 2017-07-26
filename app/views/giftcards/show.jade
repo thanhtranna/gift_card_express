@@ -5,16 +5,16 @@ block main
 
 block content
     h3= giftcard.name
-    p= giftcard.description
-    p= giftcard.minPrice
-    p= giftcard.maxPrice
-    p= giftcard.expiresAt
+    p Description: #{giftcard.description}
+    p Min price:  #{giftcard.minPrice}
+    p Max price #{giftcard.maxPrice}
+    p Expires date: #{giftcard.expiresAt}
     -if (giftcard.status == 0)
-        p Tinh trang Chua public
+        p Tinh trang: Chua public
     - else if (giftcard.status == 1)
-        p Tinh trang Da public
+        p Tinh trang: Da public
     - else
-        p Tinh trang Da ban
+        p Tinh trang: Da ban
     - if (giftcard.authGift == 0)
         p Gift card chua xac thuc
     - else
