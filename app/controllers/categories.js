@@ -113,7 +113,7 @@ exports.update = async(function* (req, res){
 });
 
 /**
- * Delete category
+ * Delete category.
  */
 
 exports.destroy = async(function* (req, res) {

@@ -21,3 +21,25 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
         - else
           li(class=isActive('/login') ? 'active' : '')
             a(href="/login", title="Login") Login
+      //ul.nav.navbar-nav.navbar-right
+      //  li
+      //    a(href='#') Link
+      //  li.dropdown
+      //    a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+      //      | Dropdown
+      //      span.caret
+      //    ul.dropdown-menu
+      //      li
+      //        a(href='#') Action
+      //      li
+      //        a(href='#') Another action
+      //      li
+      //        a(href='#') Something else here
+      //      li.divider(role='separator')
+      //      li
+              a(href='#') Separated link
+      form.nav.navbar-form.navbar-right.search-form(action='')
+        .form-group.has-feedback
+          //label.sr-only(for='search') Search
+          input#search.form-control(type='text', name='search', placeholder='Search')
+          span.glyphicon.glyphicon-search.form-control-feedback

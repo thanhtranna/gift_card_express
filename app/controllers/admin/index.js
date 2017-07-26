@@ -3,10 +3,9 @@
  */
 
 const mongoose = require('mongoose');
-const { wrap: async } = require('co');
-const { respond } = require('../../utils');
+// const { wrap: async } = require('co');
+// const { respond } = require('../../utils');
 const User = mongoose.model('User');
-
 
 /**
  * Load
@@ -34,7 +33,6 @@ exports.users = (req, res) => {
         });
     });
 };
-
 
 /**
  * Update information user by id.
@@ -78,7 +76,6 @@ exports.updateUserById = (req, res) => {
             }, (err, user) => {
                 console.log(user);
                 if (!err && user) {
-
                     console.log(req.body);
                     user.name = req.body.name;
                     user.admin = req.body.admin == 0 ? false : true ;
@@ -101,6 +98,7 @@ exports.updateUserById = (req, res) => {
 
 /**
  * Delete user by id.
+ * Method: POST
  */
 
 exports.deleteUserById = (req, res) => {

@@ -96,6 +96,15 @@ module.exports = function (app, passport) {
     app.put('/articles/:id', articleAuth, articles.update);
     app.delete('/articles/:id', articleAuth, articles.destroy);
 
+    // category routes
+    app.get('/categories', categories.index);
+    app.get('/categories/new', categories.new);
+    app.post('/categories', auth.requiresLogin, categories.create);
+    app.get('/categories/:catId', categories.show);
+    app.get('/categories/:catId/edit', categories.edit);
+    app.put('/categories/:catId', categories.update);
+    app.delete('/categories/:catId', categories.destroy);
+
     // home route
     app.get('/', articles.index);
 
