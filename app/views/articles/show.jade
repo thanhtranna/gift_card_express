@@ -9,6 +9,7 @@ block content
       p=article.body
       .meta
         - if (article.user)
+          - console.log(article.user)
           - var name = article.user.name ? article.user.name : article.user.username
           p Author :&nbsp;
             a(href="/users/"+article.user._id)= name

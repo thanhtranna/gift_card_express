@@ -17,7 +17,7 @@ const GiftcardsSchema = new Schema({
     category: { type: Schema.ObjectId, ref: 'Categories' },
     image: { type: String, default: '', trim: true },
     description: { type: String, default: '', trim: true },
-    userCreate: { type : Schema.ObjectId, ref : 'User' },
+    user: { type : Schema.ObjectId, ref : 'User' },
     maxPrice: { type: Number, default: 0, min: 0 },
     minPrice: { type: Number, default: 0, min: 0 },
     createdAt: { type: Date, default: Date.now },
@@ -51,7 +51,8 @@ GiftcardsSchema.statics = {
      * @returns {Promise|Array|{index: number, input: string}|*}
      */
     list: function (options) {
-        return this.find(options).exec();
+        return this.find(options).populate('user', 'name username')
+                    .exec();
     },
 
     /**
@@ -60,7 +61,7 @@ GiftcardsSchema.statics = {
      * @returns {Promise}
      */
     load: function (id){
-        return this.findOne({ _id: id }).exec();
+        return this.findOne({ _id: id }).populate('user', 'name username').exec();
     }
 };
 

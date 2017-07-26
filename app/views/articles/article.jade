@@ -9,9 +9,7 @@ article.article
     - if (article.user)
       | &nbsp; - &nbsp;
       span Author &nbsp;
-
       - var name = article.user.name ? article.user.name : article.user.username
-
       a(href="/users/"+article.user._id)= name
 
     - if (article.tags)

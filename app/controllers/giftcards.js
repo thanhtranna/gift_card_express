@@ -39,6 +39,7 @@ exports.create = async( function* (req, res ) {
     giftcard.category = req.body.category;
     giftcard.image = req.body.image;
     giftcard.description = req.body.description;
+    giftcard.user = req.user
     giftcard.maxPrice = req.body.maxPrice;
     giftcard.minPrice = req.body.minPrice;
     giftcard.expiresAt = req.body.expiresAt;
