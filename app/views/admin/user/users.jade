@@ -1,5 +1,5 @@
 //Created by tranthanhit on 24/07/2017.
-extends ../layouts/default
+extends ../../layouts/default
 
 block main
     h3= title
@@ -45,11 +45,11 @@ block content
                         url: "/admin/user/delete",
                         data: { userId: value }
                     })
-                        .done(function(msg) {
-                            console.log( "Successfully : " + msg );
-                            alert("Delete successfully!!")
-                            location.reload();
-                        });
+                    .done(function(msg) {
+                        console.log( "Successfully : " + msg );
+                        alert("Delete successfully!!")
+                        location.reload();
+                    });
                 }
             })
         });
