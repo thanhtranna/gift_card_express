@@ -16,12 +16,31 @@ exports.requiresLogin = function (req, res, next) {
 
 exports.user = {
   hasAuthorization: function (req, res, next) {
+    console.log(req.profile.user);
     if (req.profile.id != req.user.id) {
       req.flash('info', 'You are not authorized');
       return res.redirect('/users/' + req.profile.id);
     }
     next();
   }
+};
+
+
+/*
+ *  Admin authorization routing middleware
+ */
+
+exports.admin = {
+    hasAuthorization: function (req, res, next) {
+      console.log('Req user: ',req.user);
+        if ( req.user && req.user.admin == true ) {
+            next();
+        } else {
+            req.flash('info', 'You are not authorized');
+            return res.redirect('/');
+        }
+
+    }
 };
 
 /*

@@ -1,0 +1,27 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    - if (categories.length)
+        h3
+            a(href="/categories/new") Create new category
+
+        - each category in categories
+            - if (null == category.parent)
+                h3
+                    a(href='/categories/#{category._id}') #{category.name}
+            - else
+                h3
+                    a(href='/categories/#{category._id}') --- #{category.name}
+
+            form(action="/categories/" + category._id, method="post", onsubmit="return confirm('Are you sure?')")
+                input(type='hidden', name='_csrf', value="#{csrf_token}")
+                a.btn.btn-default(href='/categories/' + category._id + '/edit', title="edit") Edit
+                | &nbsp;
+                input(type="hidden", name="_method", value="DELETE")
+                button.btn.btn-danger(type="submit") Delete
+    - else
+        h4.muted No Category.&nbsp;
+            a(href="/categories/new") Create one

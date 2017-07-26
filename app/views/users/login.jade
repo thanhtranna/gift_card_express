@@ -1,15 +1,17 @@
 extends auth
 
 block auth
-  form.form-horizontal.form-signin(action="/users/session", method="post", role="form")
+  form#loginform.form-horizontal.form-signin(action="/users/session", method="post", role="form")
     input(type="hidden", name="_csrf", value="#{csrf_token}")
 
     p.col-sm-offset-2.error= message
 
-    input#email.form-control(type="email", placeholder="Please enter email", name="email")
+    input#email.form-control(type="email", placeholder="Please enter email", name="email", data-error="#errorEmail")
+    small#errorEmail(style='color: red;')
     br
-    input#password.form-control(type="password", placeholder="Please enter password", name="password")
-
+    input#password.form-control(type="password", placeholder="Please enter password", name="password", data-error="#errorPassword")
+    small#errorPassword(style='color: red;')
+    br
     br
     button.btn.btn-primary.btn-block(type="submit") Log in
     br
@@ -17,3 +19,43 @@ block auth
       a(href='/signup') Create account
       | &nbsp;or &nbsp;
       a(href='/forgot') Forgot password?
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js')
+  script(type='text/javascript').
+      //             just for the demos, avoids form submit
+      //             jQuery.validator.setDefaults({
+      //                 debug: true,
+      //                 success: "valid"
+      //             });
+      $("#loginform").validate({
+          rules: {
+              email: {
+                  required: true,
+                  email: true
+              },
+              password: {
+                  required: true,
+                  maxlength: 20,
+                  minlength: 4
+              }
+          },
+          messages: {
+              email: {
+                  required: "Email field required!",
+                  email: "Please enter email!"
+              },
+              password: {
+                  required: "Password field required!",
+                  maxlength: "Password field less than 20 characters!",
+                  minlength: "Password field more than 4 characters!"
+              }
+          },
+          errorElement: "span",
+          errorPlacement: function (error, element) {
+              var placement = $(element).data("error");
+              if (placement) {
+                  $(placement).append(error)
+              } else {
+                  error.insertAfter(element);
+              }
+          }
+      });

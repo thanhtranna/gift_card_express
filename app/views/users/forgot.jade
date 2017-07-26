@@ -19,14 +19,45 @@ block content
                             h2.text-center Forgot Password?
                             p You can reset your password here.
                             .panel-body
-                                form#forgot-form.form(role='form', autocomplete='off', method='post')
+                                form#forgotform.form(role='form', autocomplete='off', method='post')
                                     input(type="hidden", name="_csrf", value="#{csrf_token}")
                                     .form-group
                                         .input-group
                                             span.input-group-addon
                                                 i.glyphicon.glyphicon-envelope.color-blue
-                                            input#email.form-control(name='email', placeholder='email address', type='email')
+                                            input#email.form-control(type="email", name="email", placeholder="email address", data-error="#errorEmail")
+                                            small#errorEmail(style='color: red;')
                                     .form-group
                                         input.btn.btn-lg.btn-primary.btn-block(name='recover-submit', value='Reset Password', type='submit')
-                                    input#token.hide(type='hidden', name='token', value='')
                                 // end form
+                                
+    script(type='text/javascript ', src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js ')
+        script(type='text/javascript ').
+            // just for the demos, avoids form submit
+            // jQuery.validator.setDefaults({
+            //     debug: true,
+            //     success: "valid "
+            // });
+            $("#forgotform").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "Email field required!",
+                        email: "Please enter email! "
+                    }
+                },
+                errorElement: "span",
+                errorPlacement: function (error, element) {
+                    var placement = $(element).data("error");
+                    if (placement) {
+                        $(placement).append(error)
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });

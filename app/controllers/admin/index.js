@@ -3,8 +3,10 @@
  */
 
 const mongoose = require('mongoose');
+
 // const {wrap: async} = require('co');
 // const {respond} = require('../../utils');
+
 const User = mongoose.model('User');
 const GiftCard = mongoose.model('GiftCard');
 const Transaction = mongoose.model('Transaction');
@@ -68,7 +70,7 @@ exports.editUserById = (req, res) => {
 
 /**
  * Update information user by id.
- * Method: GET
+ * Method: POST
  */
 
 exports.updateUserById = (req, res) => {
@@ -80,17 +82,24 @@ exports.updateUserById = (req, res) => {
             }, (err, user) => {
                 console.log(user);
                 if (!err && user) {
-                    res.render('admin/edit-user', {
-                        title: 'Edit User',
-                        user: user
+
+                    console.log(req.body);
+                    user.name = req.body.name;
+                    user.admin = req.body.admin == 0 ? false : true ;
+                    user.save((err) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            res.redirect('/admin/users');
+                        }
                     });
                 } else {
-                    res.redirect('admin/users');
+                    res.redirect('/admin/users');
                 }
             }
         );
     } else {
-        res.redirect('admin/users');
+        res.redirect('/admin/users');
     }
 };
 
