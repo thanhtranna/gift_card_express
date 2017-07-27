@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const asynct = require('async');
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
-const { respond } = require('../utils');
+const { respond, respondOrRedirect } = require('../utils');
 const User = mongoose.model('User');
 
 /**
@@ -38,16 +38,21 @@ exports.create = async(function* (req, res) {
     yield user.save();
     req.logIn(user, err => {
       if (err) req.flash('info', 'Sorry! We are not able to log you in!');
-      return res.redirect('/');
+      // Response and redirect homepage.
+      console.log('Dang Nhap thanh cong.');
+      return respondOrRedirect({ req, res }, '/', {}, {
+        type: 'info',
+        text: 'Sorry! We are not able to log you in!'
+      });
     });
   } catch (err) {
     const errors = Object.keys(err.errors)
       .map(field => err.errors[field].message);
 
-    res.render('users/signup', {
-      title: 'Sign up',
-      errors,
-      user
+    respond(res, 'users/signup', {
+        title: 'Sign up',
+        errors,
+        user
     });
   }
 });
@@ -58,6 +63,7 @@ exports.create = async(function* (req, res) {
 
 exports.show = function (req, res) {
   const user = req.profile;
+  console.log(user);
   respond(res, 'users/show', {
     title: user.name,
     user: user
@@ -73,11 +79,12 @@ exports.signin = function () {};
 exports.authCallback = login;
 
 /**
- * Show login form
+ *  Show login form.
+ *  Method: GET
  */
 
 exports.login = function (req, res) {
-  res.render('users/login', {
+  respond(res, 'users/login', {
     title: 'Login'
   });
 };
@@ -85,12 +92,13 @@ exports.login = function (req, res) {
 
 /**
  * Show sign up form
+ * Method: GET
  */
 
 exports.signup = function (req, res) {
-  res.render('users/signup', {
-    title: 'Sign up',
-    user: new User()
+  respond(res, 'users/signup', {
+      title: 'Sign up',
+      user: new User()
   });
 };
 
@@ -109,7 +117,8 @@ exports.logout = function (req, res) {
  */
 
 exports.forgot = function (req, res) {
-    res.render('users/forgot', {
+    // Response and render page.
+    respond(res, 'users/forgot', {
         title: 'Forgot Password'
     });
 };
@@ -139,14 +148,17 @@ exports.forgotPassword = (req, res, next) => {
                     console.log('No account from database!!');
                     req.flash('warning', 'No account with that email address exists.');
                     console.log('Req flash warning: ', req.flash('warning'));
-                    return res.redirect('/forgot');
+                    // Response and redirect webpage.
+                    return respondOrRedirect({ req, res }, '/forgot', {}, {
+                        type: 'warning',
+                        text: 'No account with that email address exists.'
+                    });
                 }
-
+                // Set token to user.
                 user.resetPasswordToken = token;
                 user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-                // Reset password.
-                user.password = '12345';
 
+                // Update information user.
                 user.save((err) => {
                     console.log(err);
                     if (err) return done(err);
@@ -175,13 +187,17 @@ exports.forgotPassword = (req, res, next) => {
                 console.log('Send email successfully!!');
                 req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
                 console.log('Req flash info: ', req.flash('info'));
-                done(err, 'done');
+                done(err, 'An e-mail has been sent to ' + user.email + ' with further instructions.');
             });
         }
-    ], (err) => {
+    ], (err, message) => {
         if (err)
             return next(err);
-        res.redirect('/forgot');
+        // Response and redirect webpage.
+        respondOrRedirect({ req, res }, '/forgot', {}, {
+            type: 'success',
+            text: message
+        });
     });
 };
 
@@ -200,10 +216,15 @@ exports.reset = (req, res) => {
         if (!user) {
             req.flash('warning', 'Password reset token is invalid or has expired.');
             console.log('Req flash warning: ', req.flash('warning'));
-            return res.redirect('/forgot');
+            // Response and redirect
+            return respondOrRedirect({ req, res }, '/forgot', { user }, {
+                type: 'warning',
+                text: 'Password reset token is invalid or has expired.'
+            });
         }
         console.log('Req.user: ', req.user);
-        res.render('users/reset', {
+        // Response
+        respond(res, 'users/reset', {
             title: 'Reset Password'
         });
     });
@@ -226,7 +247,11 @@ exports.resetPassword = (req, res) => {
                 if (!user) {
                     req.flash('errors', 'Password reset token is invalid or has expired.');
                     console.log('Req flash errors: ', req.flash('errors'));
-                    return res.redirect('back');
+                    // Response and redirect
+                    return respondOrRedirect({ req, res }, 'back', {}, {
+                        type: 'errors',
+                        text: 'Password reset token is invalid or has expired.'
+                    });
                 }
 
                 console.log('User', user);
@@ -243,10 +268,6 @@ exports.resetPassword = (req, res) => {
                     } else {
                         done(err, user);
                     }
-
-                    // req.logIn(user, (err) => {
-                    //
-                    // });
                 });
             });
         },
@@ -267,11 +288,15 @@ exports.resetPassword = (req, res) => {
             smtpTransport.sendMail(mailOptions, (err) => {
                 req.flash('success', 'Success! Your password has been changed.');
                 console.log('Req flash success: ', req.flash('success'));
-                done(err);
+                done(err, 'Success! Your password has been changed.');
             });
         }
-    ], (err) => {
-        res.redirect('/login');
+    ], (err, message) => {
+        // Response and redirect
+        respondOrRedirect({ req, res }, '/login', {}, {
+            type: 'success',
+            text: message
+        });
     });
 };
 
@@ -287,9 +312,15 @@ exports.session = login;
  */
 
 function login (req, res) {
+    console.log('Req session: ');
+    console.log(req.session);
   const redirectTo = req.session.returnTo
     ? req.session.returnTo
     : '/';
   delete req.session.returnTo;
-  res.redirect(redirectTo);
+  // res.redirect(redirectTo);
+  respondOrRedirect({ req, res }, redirectTo, {}, {
+     type: 'success',
+     text: 'Login successfully'
+  });
 }
