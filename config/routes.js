@@ -10,7 +10,7 @@ const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
 
 const categories = require('../app/controllers/admin/categories');
-const giftcards = require('../app/controllers/giftcards');
+// const giftcards = require('../app/controllers/giftcards');
 
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
