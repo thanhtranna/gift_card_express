@@ -37,14 +37,14 @@ module.exports = function (app, passport) {
 
     const pauth = passport.authenticate.bind(passport);
 
-    // admin routes
+    // admin routes.
     app.get('/admin', adminUser.index);
     app.get('/admin/users', adminUser.users);
     app.get('/admin/user/edit/:userId', adminUser.editUserById);
     app.post('/admin/user/edit/:userId', adminUser.updateUserById);
     app.post('/admin/user/delete', adminUser.deleteUserById);
 
-    // admin routes
+    // admin users management routes.
     app.get('/admin', adminAuth, adminUser.index);
     app.get('/admin/users', adminAuth, adminUser.users);
     app.get('/admin/user/edit/:userId', adminAuth, adminUser.editUserById);

@@ -4,7 +4,7 @@ const { respond, respondOrRedirect } = require('../../utils');
 const Categories = mongoose.model('Categories');
 
 
-exports.index = async(function* (req, res) {
+exports.index = async(function*(req, res) {
     const options = {};
     const categories = yield Categories.list(options);
     respond(res, 'admin/categories/index', {
@@ -17,7 +17,7 @@ exports.index = async(function* (req, res) {
  * New categories
  */
 
-exports.new = async(function* (req, res) {
+exports.new = async(function*(req, res) {
     const options = {
         parent: null
     };
@@ -30,10 +30,10 @@ exports.new = async(function* (req, res) {
 });
 
 /**
- * Create an category
+ * Create an category.
  */
 
-exports.create = async( function* (req, res ) {
+exports.create = async(function*(req, res) {
     const category = new Categories();
     category.name = req.body.name;
     category.description = req.body.description;
@@ -60,7 +60,7 @@ exports.create = async( function* (req, res ) {
 /**
  * Show detail category
  */
-exports.show = async(function* (req, res) {
+exports.show = async(function*(req, res) {
     const category = yield Categories.load(req.param('catId'));
     respond(res, 'admin/categories/show', {
         title: 'Show category detail',
@@ -72,7 +72,7 @@ exports.show = async(function* (req, res) {
  * Edit category
  */
 
-exports.edit = async(function* (req, res) {
+exports.edit = async(function*(req, res) {
     const category = yield Categories.load(req.param('catId'));
     const options = {
         parent: null
@@ -89,7 +89,7 @@ exports.edit = async(function* (req, res) {
  * Update category
  */
 
-exports.update = async(function* (req, res){
+exports.update = async(function*(req, res) {
     const category = yield Categories.load(req.param('catId'));
     category.name = req.body.name;
     category.description = req.body.description;
@@ -98,7 +98,7 @@ exports.update = async(function* (req, res){
         if (category.saveCat()) {
             const options = {};
             const categories = yield Categories.list(options);
-            respondOrRedirect({ req, res }, '/categories', categories, {
+            respondOrRedirect({ req, res }, '/admin/categories', categories, {
                 type: 'success',
                 text: 'Successfully update categories!'
             });
@@ -116,7 +116,7 @@ exports.update = async(function* (req, res){
  * Delete category.
  */
 
-exports.destroy = async(function* (req, res) {
+exports.destroy = async(function*(req, res) {
     const category = yield Categories.load(req.param('catId'));
     category.remove();
     respondOrRedirect({ req, res }, '/categories', {}, {
