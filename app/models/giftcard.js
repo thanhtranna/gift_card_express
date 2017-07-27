@@ -18,7 +18,7 @@ const Schema = mongoose.Schema;
  * GiftCard Schema
  */
 
-const GiftCardSchema = new mongoose.Schema({
+const GiftCardSchema = new Schema({
     transaction: [
         {
             type: Schema.Types.ObjectId,

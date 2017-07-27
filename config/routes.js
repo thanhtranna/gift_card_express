@@ -33,7 +33,6 @@ const fail = {
 
 module.exports = function (app, passport) {
 
-
   const pauth = passport.authenticate.bind(passport);
 
   // admin routes
@@ -161,7 +160,6 @@ module.exports = function (app, passport) {
     if (req.accepts('json')) return res.status(404).json(payload);
     res.status(404).render('404', payload);
   });
-
 
 };
 
