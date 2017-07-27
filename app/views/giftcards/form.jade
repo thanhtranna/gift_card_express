@@ -8,7 +8,7 @@ block content
     - action += giftcard.isNew ? '' : '/' + giftcard._id
     .row
         .col-md-8
-            form.form-horizontal(method="post", action=action, role="form", enctype="multipart/form-data")
+            form.form-horizontal(method="post", action=action, role="form", enctype='multipart/form-data')
                 input(type="hidden", name="_csrf", value="#{csrf_token}")
                 - if (!giftcard.isNew)
                     input(type="hidden", name="_method", value="PUT")
@@ -45,12 +45,14 @@ block content
                     label.col-sm-2.control-label(for='minPrice') Minprice
                     .col-sm-10
                         input.form-control#minPrice(type='text', name="minPrice", value=giftcard.minPrice, placeholder='Enter the min price')
+                - console.log('ExpiresAt: ', giftcard.expiresAt)
+                - console.log('Convert ExporesAt: ', moment(giftcard.expiresAt).format('L'))
                 .form-group
                     label.col-sm-2.control-label(for='expiresAt') Expires Date
                     .col-sm-10
-                        input.form-control#expiresAt(type='date', name="expiresAt",  placeholder='Enter the min price', value=giftcard.expiresAt.toString() ? giftcard.expiresAt.toString() : '')
+                        input.form-control#expiresAt(type='date', name="expiresAt",  placeholder='Enter the min price', value=moment(giftcard.expiresAt).format('L'))
                 .form-group
                     .col-sm-offset-2.col-sm-10
-                        button.btn.btn-primary(type='submit') Save
+                        input.btn.btn-primary(type='submit', value='Save')
                         | &nbsp;
                         a.btn(href='/giftcards', title="cancel") Cancel

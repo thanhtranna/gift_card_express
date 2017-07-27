@@ -33,7 +33,6 @@ const GiftCardsSchema = new Schema({
 
 GiftCardsSchema.methods = {
     saveGiftcard: function () {
-        console.log(this.image);
         // code upload image
         return this.save();
     }

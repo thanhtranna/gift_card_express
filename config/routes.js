@@ -140,7 +140,6 @@ module.exports = function (app, passport) {
     // tag routes
     app.get('/tags/:tag', tags.index);
 
-
     /**
      * Error handling
      */

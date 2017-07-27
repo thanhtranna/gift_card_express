@@ -23,6 +23,7 @@ const helpers = require('view-helpers');
 const config = require('./');
 const pkg = require('../package.json');
 
+
 const env = process.env.NODE_ENV || 'development';
 
 /**
@@ -30,6 +31,9 @@ const env = process.env.NODE_ENV || 'development';
  */
 
 module.exports = function (app, passport) {
+
+  // using moment.
+  app.locals.moment = require('moment');
 
   // Compression middleware (should be placed before express.static)
   app.use(compression({

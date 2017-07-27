@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const path = require('path');
 const multer = require('multer');
-const { storage } = require('../../config/uploadFile');
+const fs = require('fs');
 const { respond, respondOrRedirect } = require('../utils');
 const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
@@ -49,7 +49,7 @@ exports.create = async(function*(req, res) {
     giftcard.minPrice = req.body.minPrice;
     giftcard.expiresAt = req.body.expiresAt;
     console.log('Gift Card: ', giftcard);
-    console.log('Path upload file: ',path.join((process.cwd() + ' ').trim(), '/uploads'));
+    console.log('File upload: ',req.file);
 
     try {
         if (giftcard.saveGiftcard()) {
@@ -103,18 +103,48 @@ exports.edit = async(function*(req, res) {
  * Update gift card
  */
 
+
+
 exports.update = async(function*(req, res) {
     console.log('Update gift card:=---------------');
     const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.name = req.body.name;
     giftcard.category = req.body.category;
-    giftcard.image = req.body.image;
+    // giftcard.image = req.body.image;
     giftcard.description = req.body.description;
     giftcard.maxPrice = req.body.maxPrice;
     giftcard.minPrice = req.body.minPrice;
     giftcard.expiresAt = (null == req.body.expiresAt) ? Date.now : req.body.expiresAt;
+    console.log('Giftcard: ',giftcard);
     console.log('------------------------------------------------------------');
-    console.log('Path upload file: ',path.join((process.cwd() + ' ').trim(), '/uploads'));
+    console.log('Path upload file: ', path.join((process.cwd() + ' ').trim(), '/uploads'));
+
+    const options = {};
+    const giftcards = yield GiftCards.list(options);
+
+    const MAGIC_NUMBERS = {
+        jpg: 'ffd8ffe0',
+        jpg1: 'ffd8ffe1',
+        png: '89504e47',
+        gif: '47494638'
+    };
+
+    const pathFile = path.join((process.cwd() + ' ').trim(), '/uploads');
+
+    // Storage file.
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, pathFile);
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        }
+    });
+
+    // Check magic numbers.
+    var checkMagicNumbers = ( magic ) => {
+        if (magic == MAGIC_NUMBERS.jpg || magic == MAGIC_NUMBERS.jpg1 || magic == MAGIC_NUMBERS.png || magic == MAGIC_NUMBERS.gif) return true;
+    };
 
     try {
         var upload = multer({
@@ -122,16 +152,18 @@ exports.update = async(function*(req, res) {
             fileFilter: function (req, file, callback) {
                 var ext = path.extname(file.originalname);
                 if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-                    return callback(res.end('Only images are allowed'), null);
+                    return callback('Only images are allowed', null);
                 }
                 callback(null, true);
             }
         }).single('image');
-
-        const options = {};
-        const giftcards = yield GiftCards.list(options);
-
         upload(req, res, (err) => {
+            var bitmap = fs.readFileSync(pathFile + '/' + req.file.filename).toString('hex', 0, 4)
+            if (!checkMagicNumbers(bitmap)) {
+                fs.unlinkSync(pathFile + '/' + req.file.filename);
+                console.log('qweoiqweioqwi');
+                res.end('File is no valid');
+            }
             if (err) {
                 console.log('Co loi xay ra render lai trang listgift');
                 respondOrRedirect({ req, res }, '/giftcards', giftcards, {
@@ -154,6 +186,7 @@ exports.update = async(function*(req, res) {
             }
         });
     } catch (err) {
+        console.log('Co loi xay ra');
         respond(res, 'giftcards/new', {
             title: 'New giftcard',
             errors: [err.toString()],
@@ -167,7 +200,7 @@ exports.update = async(function*(req, res) {
  */
 
 exports.destroy = async(function*(req, res) {
-    const giftcard = yield Giftcards.load(req.param('giftId'));
+    const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.remove();
     respondOrRedirect({ req, res }, '/giftcards', {}, {
         type: 'info',
