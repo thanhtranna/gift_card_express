@@ -5,64 +5,107 @@
  */
 
 const mongoose = require('mongoose');
+// const notify = require('../mailer');
+
+
 
 const Schema = mongoose.Schema;
 
-/**
- * Gift card Schema
- */
-
-const GiftcardsSchema = new Schema({
-    name: { type: String, default: '', trim: true },
-    category: { type: Schema.ObjectId, ref: 'Categories' },
-    image: { type: String, default: '', trim: true },
-    description: { type: String, default: '', trim: true },
-    user: { type : Schema.ObjectId, ref : 'User' },
-    maxPrice: { type: Number, default: 0, min: 0 },
-    minPrice: { type: Number, default: 0, min: 0 },
-    createdAt: { type: Date, default: Date.now },
-    updateAt: { type: Date, default: Date.now },
-    expiresAt: { type: Date, default: Date.now },
-    status: { type: Number, default: 0 },
-    authGift: { type: Number, default: 0 }
-});
+// const getTags = tags => tags.join(',');
+// const setTags = tags => tags.split(',');
 
 /**
- * Method
- * @type {{}}
+ * GiftCard Schema
  */
 
-GiftcardsSchema.methods = {
-    saveGiftcard: function () {
-        // console.log(image);
-        // code upload image
+const GiftCardSchema = new Schema({
+    transaction: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Transaction'
+        }
+    ],
+    user: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    order: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Order'
+        }
+    ],
+    category: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Category'
+        }
+    ],
+    descriptions: {
+        type: String
+    },
+    image: {
+        type: String
+    },
+    maxPrice: {
+        type: Number
+    },
+    minPrice: {
+        type: Number
+    },
+    expiresDate: {
+        type: Date
+    },
+    status: {
+        type: Number
+    },
+    authGift: {
+        type: Number
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
+    },
+    updated_at: {
+        type: Date
+    }
+}, { collection: 'GiftCard' });
+
+/**
+* Validations
+*/
+
+GiftCardSchema.path('maxPrice').required(true, 'Article title cannot be blank');
+GiftCardSchema.path('minPrice').required(true, 'Article body cannot be blank');
+// GiftCardSchema.path('expiresDate').required(true, 'Article body cannot be blank');
+
+
+GiftCardSchema.methods = {
+
+
+    saveGift: function () {
         return this.save();
     },
 };
 
-/**
- * Statics
- */
+GiftCardSchema.statics = {
 
-GiftcardsSchema.statics = {
     /**
-     * Get list gift card
-     * @param options
-     * @returns {Promise|Array|{index: number, input: string}|*}
+     * List GiftCard
      */
+
     list: function (options) {
-        return this.find(options).populate('user', 'name username')
-                    .exec();
-    },
+        return this.find(options)
+            .populate('User','Categories')
+            .exec();
 
-    /**
-     * Get gift card by Id
-     * @param id
-     * @returns {Promise}
-     */
+    },
     load: function (id){
-        return this.findOne({ _id: id }).populate('user', 'name username').exec();
+        return this.findOne({ _id: id }).exec();
     }
+
 };
 
-mongoose.model('Giftcard', GiftcardsSchema);
+module.exports = mongoose.model('GiftCard', GiftCardSchema);

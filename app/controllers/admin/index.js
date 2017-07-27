@@ -3,9 +3,14 @@
  */
 
 const mongoose = require('mongoose');
-// const { wrap: async } = require('co');
-const { respond , respondOrRedirect } = require('../../utils');
+
+
+const { wrap: async } = require('co');
+const { respond } = require('../../utils');
+
 const User = mongoose.model('User');
+const GiftCard = mongoose.model('GiftCard');
+const Transaction = mongoose.model('Transaction');
 
 /**
  * Load
@@ -229,5 +234,71 @@ exports.deleteUserById = (req, res) => {
             res.json(400);
             console.log('Xoa thanh cong!');
         }
+    });
+};
+/**
+ * List GiftCard
+ */
+exports.listgift = async(function* (req, res) {
+    const options = {};
+    const giftcards = yield GiftCard.list(options);
+    User.findOne({ _id : giftcards.user } , function (err, users) {
+        if (!err && users) {
+            console.log(users.name);
+
+        } else {
+            console.log('not found');
+        }
+
+    });
+    respond(res, 'admin/listgift', {
+        title: 'List GiftCard',
+        giftcards: giftcards
+    });
+});
+
+// exports.listgift = (req, res) => {
+//     // Call Service list GiftCard.
+//     GiftCard.find({}, (err, giftcards) => {
+//         if (!err && giftcards){
+//             console.log('gift card:',giftcards);
+//             User.findOne({ _id: giftcards.user } , function (err, users) {
+//                 if (!err && users) {
+//                     console.log(users.name);
+//
+//                 }
+//                 res.render('admin/listgift', {
+//                     title: 'GiftCard',
+//                     giftcards: giftcards,
+//                     user: users
+//                 });
+//             });
+//         }
+//
+//     });
+//
+// };
+/**
+ * show detail
+ */
+exports.show = async(function* (req, res) {
+    const giftcards = yield GiftCard.load(req.param('giftId'));
+    respond(res, 'admin/show', {
+        title: 'Show gift card detail',
+        giftcards: giftcards
+    });
+});
+/**
+ * List Transaction
+ */
+
+exports.transaction = (req, res) => {
+    // Call Service list Transaction.
+    Transaction.find({}, (err, transaction) => {
+        console.log(transaction);
+        res.render('admin/transaction', {
+            title: 'Transaction',
+            transactions: transaction
+        });
     });
 };

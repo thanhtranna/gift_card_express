@@ -16,6 +16,8 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
             a(href="/giftcards", title="List gift card") Gift card
           li
             a(href="/users/"+req.user.id, title="Profile") Profile
+            li
+              a(href="#", title="Management") My gift
           li
             a(href="/logout", title="logout") Logout
         - else
