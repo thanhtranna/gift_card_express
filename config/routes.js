@@ -62,8 +62,6 @@ module.exports = function (app, passport) {
     app.put('/admin/categories/:catId', adminAuth, categories.update);
     app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
 
-
-
     // user routes
     app.get('/login', users.login);
     app.get('/signup', users.signup);

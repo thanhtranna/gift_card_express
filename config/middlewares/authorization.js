@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- *  Generic require login routing middleware
+ *  Generic require login routing middleware.
  */
 
 exports.requiresLogin = function (req, res, next) {
@@ -11,7 +11,7 @@ exports.requiresLogin = function (req, res, next) {
 };
 
 /**
- *  User authorization routing middleware
+ *  User authorization routing middleware.
  */
 
 exports.user = {
