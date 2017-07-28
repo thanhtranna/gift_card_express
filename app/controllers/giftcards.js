@@ -8,12 +8,30 @@ const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
 
 /**
- * List gift cards
+ * List all gift cards
  */
-exports.index = async(function*(req, res) {
-    const options = {};
-    const giftcards = yield GiftCards.list(options);
+exports.index = async(function* (req, res) {
+    const options = {
+        status : 1,
+        user : {$ne : req.user}
+
+    };
+    const giftcards = yield Giftcards.list(options);
     respond(res, 'giftcards/index', {
+        title: 'List Gift cards',
+        giftcards: giftcards,
+    });
+});
+
+/**
+ * List gift cards by user
+ */
+exports.giftcardByUser = async(function* (req, res) {
+    const options = {
+        user : req.user
+    };
+    const giftcards = yield Giftcards.list(options);
+    respond(res, 'giftcards/list_gift_by_user', {
         title: 'List Gift cards',
         giftcards: giftcards,
     });
@@ -208,3 +226,24 @@ exports.destroy = async(function*(req, res) {
     });
 });
 
+/**
+ * Update gift card
+ */
+
+exports.sell = async(function* (req, res){
+    const giftcard = yield Giftcards.load(req.param('giftId'));
+    giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0
+    try {
+        if (giftcard.saveGiftcard()) {
+            respondOrRedirect({ req, res }, '/giftcards', giftcard, {
+                type: 'success',
+            });
+        }
+    } catch (err) {
+        respond(res, 'giftcards', {
+            title: 'Error Change giftcard',
+            errors: [err.toString()],
+            giftcard
+        }, 422);
+    }
+});
