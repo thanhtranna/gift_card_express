@@ -23,6 +23,9 @@ const auth = require('./middlewares/authorization');
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
+const giftcardsAdmin = require('../app/controllers/admin/giftcards');
+const transactions = require('../app/controllers/admin/transaction');
+const giftcardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
 
 const fail = {
     failureRedirect: '/login'
@@ -45,6 +48,7 @@ module.exports = function (app, passport) {
     app.post('/admin/user/delete', adminUser.deleteUserById);
 
     // admin routes
+
     app.get('/admin', adminAuth, adminUser.index);
     app.get('/admin/users', adminAuth, adminUser.users);
     app.get('/admin/user/edit/:userId', adminAuth, adminUser.editUserById);
