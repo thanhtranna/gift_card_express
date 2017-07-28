@@ -59,7 +59,7 @@ GiftCardsSchema.statics = {
      * @returns {Promise}
      */
     load: function (id){
-        return this.findOne({ _id: id }).populate('user', 'name username').exec();
+        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
     }
 };
 

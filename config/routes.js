@@ -11,7 +11,7 @@ const articles = require('../app/controllers/articles');
 
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
-const giftcardsAdmin = require('../app/controllers/admin/giftcards');
+
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -23,7 +23,6 @@ const auth = require('./middlewares/authorization');
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
-const giftcardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
 
 const fail = {
     failureRedirect: '/login'
@@ -38,14 +37,14 @@ module.exports = function (app, passport) {
 
     const pauth = passport.authenticate.bind(passport);
 
-    // admin routes.
+    // admin routes
     app.get('/admin', adminUser.index);
     app.get('/admin/users', adminUser.users);
     app.get('/admin/user/edit/:userId', adminUser.editUserById);
     app.post('/admin/user/edit/:userId', adminUser.updateUserById);
     app.post('/admin/user/delete', adminUser.deleteUserById);
 
-    // admin users management routes.
+    // admin routes
     app.get('/admin', adminAuth, adminUser.index);
     app.get('/admin/users', adminAuth, adminUser.users);
     app.get('/admin/user/edit/:userId', adminAuth, adminUser.editUserById);
@@ -53,9 +52,12 @@ module.exports = function (app, passport) {
     app.post('/admin/user/profile', adminAuth, adminUser.updateAdminById);
     app.post('/admin/user/edit/:userId', adminAuth, adminUser.updateUserById);
     app.post('/admin/user/delete', adminAuth, adminUser.deleteUserById);
+    app.get('/admin/listgift', adminUser.listgift);
+    app.get('/admin/listgift/:giftId', adminUser.show);
+    app.get('/admin/transaction', transactions.transaction);
 
     // category routes. admin permission
-    app.get('/admin/categories', adminAuth, categories.index);
+    app.get('/admin/categories/', adminAuth, categories.index);
     app.get('/admin/categories/new', adminAuth, categories.new);
     app.post('/admin/categories', adminAuth, categories.create);
     app.get('/admin/categories/:catId', adminAuth, categories.show);

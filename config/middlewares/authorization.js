@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Giftcards = mongoose.model('Giftcard');
+const Giftcards = mongoose.model('GiftCards');
 const { wrap: async } = require('co');
 
 /**
