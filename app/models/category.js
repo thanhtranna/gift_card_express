@@ -26,6 +26,11 @@ const CategoriesSchema = new Schema({
 
 CategoriesSchema.path('name').required(true, 'Categories cannot be blank');
 
+
+/**
+ * Method
+ * @type {}
+ */
 CategoriesSchema.methods = {
 
     /**
@@ -56,6 +61,11 @@ CategoriesSchema.statics = {
         return this.find(options).exec();
     },
 
+    /**
+     * Load category by id
+     * @param id
+     * @returns {Promise}
+     */
     load: function (id){
         return this.findOne({ _id: id }).exec();
     }

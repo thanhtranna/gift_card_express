@@ -3,6 +3,7 @@ const { wrap: async } = require('co');
 const { respond, respondOrRedirect  } = require('../utils');
 const Giftcards = mongoose.model('Giftcard');
 const Categories = mongoose.model('Categories');
+const Order = mongoose.model('Order');
 
 /**
  * List all gift cards
@@ -10,8 +11,7 @@ const Categories = mongoose.model('Categories');
 exports.index = async(function* (req, res) {
     const options = {
         status : 1,
-        user : {$ne : req.user}
-
+        user : { $ne : req.user }
     };
     const giftcards = yield Giftcards.list(options);
     respond(res, 'giftcards/index', {
@@ -84,9 +84,14 @@ exports.create = async( function* (req, res ) {
  */
 exports.show = async(function* (req, res) {
     const giftcard = yield Giftcards.load(req.param('giftId'));
+    const options = {
+        giftcard: giftcard._id
+    }
+    const giftcardOrders = yield Order.list(options);
     respond(res, 'giftcards/show', {
         title: 'Show gift card detail',
-        giftcard: giftcard
+        giftcard: giftcard,
+        giftcardOrders: giftcardOrders
     });
 });
 
@@ -152,12 +157,12 @@ exports.destroy = async(function* (req, res) {
 });
 
 /**
- * Update gift card
+ * Sell gift card
  */
 
 exports.sell = async(function* (req, res){
     const giftcard = yield Giftcards.load(req.param('giftId'));
-    giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0
+    giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0;
     try {
         if (giftcard.saveGiftcard()) {
             respondOrRedirect({ req, res }, '/giftcards', giftcard, {
@@ -171,4 +176,16 @@ exports.sell = async(function* (req, res){
             giftcard
         }, 422);
     }
+});
+
+/**
+ * Buy gift card
+ */
+exports.confirmBuy = async(function* (req, res){
+    const giftcard = yield Giftcards.load(req.body.giftId);
+    respond(res, 'orders/confirm', {
+        title: 'Confirm orders gift card',
+        price: req.body.price,
+        giftcard: giftcard
+    });
 });

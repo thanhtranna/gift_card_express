@@ -1,39 +1,69 @@
+'use strict';
+
 /**
- * Created by tranthanhit on 24/07/2017.
+ * Module dependencies.
  */
+
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
-const OrderSchema = new mongoose.Schema({
-    user: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
-    giftcard: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'GiftCard'
-        }
-    ],
-    transaction: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Transaction'
-        }
-    ],
-    price: {
-        type: Number,
-        required: true
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date
-    }
-}, { collection: 'Order' });
+/**
+ * Order Schema
+ */
 
-module.exports = mongoose.model('Order', OrderSchema);
+const OrderSchema = new Schema({
+    giftcard: { type: Schema.ObjectId, ref: 'Giftcard' },
+    price: { type: String, default: '0', trim: true },
+    user: { type: Schema.ObjectId, ref: 'User' },
+    bought: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now },
+    updateAt: { type: Date, default: Date.now }
+});
+
+
+/**
+ * Method
+ * @type {}
+ */
+OrderSchema.methods = {
+
+    /**
+     * Save order
+     *
+     * @param {Object} images
+     * @api private
+     */
+
+    saveOrder: function () {
+        return this.save();
+    },
+};
+
+
+OrderSchema.statics = {
+
+    /**
+     * List categories
+     */
+
+    list: function (options) {
+        return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image' }]).exec();
+    },
+
+    /**
+     * Load category by id
+     * @param id
+     * @returns {Promise}
+     */
+    load: function (id){
+        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image' }]).exec();
+    },
+
+    listByUser: function (condition, arrIn) {
+        return this.find().where(condition).in(arrIn);
+    }
+};
+
+
+mongoose.model('Order', OrderSchema);
