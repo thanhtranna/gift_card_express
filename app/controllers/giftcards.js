@@ -10,6 +10,7 @@ const Categories = mongoose.model('Categories');
 /**
  * List all gift cards
  */
+
 exports.index = async(function* (req, res) {
     const options = {
         status : 1,
@@ -54,6 +55,7 @@ exports.new = async(function*(req, res) {
 /**
  * Create gift card
  */
+
 exports.create = async(function*(req, res) {
     console.log('Create gift card:=----------------------');
     const giftcard = new GiftCards();
@@ -90,6 +92,7 @@ exports.create = async(function*(req, res) {
 /**
  * Show detail gift card
  */
+
 exports.show = async(function*(req, res) {
     console.log('Show gift card:=----------------------');
     const giftcard = yield GiftCards.load(req.param('giftId'));
@@ -120,8 +123,6 @@ exports.edit = async(function*(req, res) {
 /**
  * Update gift card
  */
-
-
 
 exports.update = async(function*(req, res) {
     console.log('Update gift card:=---------------');
@@ -176,7 +177,7 @@ exports.update = async(function*(req, res) {
             }
         }).single('image');
         upload(req, res, (err) => {
-            var bitmap = fs.readFileSync(pathFile + '/' + req.file.filename).toString('hex', 0, 4)
+            var bitmap = fs.readFileSync(pathFile + '/' + req.file.filename).toString('hex', 0, 4);
             if (!checkMagicNumbers(bitmap)) {
                 fs.unlinkSync(pathFile + '/' + req.file.filename);
                 console.log('qweoiqweioqwi');

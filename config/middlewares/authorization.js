@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const Giftcards = mongoose.model('Giftcard');
 const { wrap: async } = require('co');
 
- *  Generic require login routing middleware
+/**
+ *  Generic require login routing middleware.
  */
 
 exports.requiresLogin = function (req, res, next) {
@@ -14,7 +15,7 @@ exports.requiresLogin = function (req, res, next) {
 };
 
 /**
- *  User authorization routing middleware
+ *  User authorization routing middleware.
  */
 
 exports.user = {
@@ -30,7 +31,7 @@ exports.user = {
 
 
 /**
- *  Admin authorization routing middleware
+ *  Admin authorization routing middleware.
  */
 
 exports.admin = {
@@ -47,7 +48,7 @@ exports.admin = {
 };
 
 /**
- *  Article authorization routing middleware
+ *  Article authorization routing middleware.
  */
 
 exports.article = {
@@ -61,7 +62,7 @@ exports.article = {
 };
 
 /**
- * Comment authorization routing middleware
+ * Comment authorization routing middleware.
  */
 
 exports.comment = {
@@ -76,6 +77,10 @@ exports.comment = {
         }
     }
 };
+
+/**
+ *  Giftcard authorization routing middleware.
+ */
 
 exports.giftcard = {
     hasAuthorization: async (function* (req, res, next) {
