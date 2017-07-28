@@ -19,3 +19,21 @@ block content
         p Gift card chua xac thuc
     - else
         p Gift card da xac thuc
+
+    - if (req.isAuthenticated())
+        - if ((req.user._id+"" != giftcard.user._id+""))
+            - if ((giftcard.status == 1) && (giftcard.authGift == 1))
+                form(action="/giftcards/" + giftcard._id + '/buy', method="post", onsubmit="return confirm('Are you sure?')")
+                    input(type='hidden', name='_csrf', value="#{ csrf_token }")
+                    input(type='text', name='orderPrice', value="", placeholder='Enter price you want buy!' )
+                    button.btn.btn-info(type="submit") BUY NOW
+        - else
+            form(action="/giftcards/" + giftcard._id, method="post", onsubmit="return confirm('Are you sure?')")
+                input(type='hidden', name='_csrf', value="#{ csrf_token }")
+                a.btn.btn-default(href='/giftcards/' + giftcard._id + '/edit', title="edit") Edit
+                | &nbsp;
+                input(type="hidden", name="_method", value="DELETE")
+                button.btn.btn-danger(type="submit") Delete
+    - else
+        h4
+            a(href="/login") Login and Buy now

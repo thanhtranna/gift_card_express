@@ -1,5 +1,9 @@
 'use strict';
 
+const mongoose = require('mongoose');
+const Giftcards = mongoose.model('Giftcard');
+const { wrap: async } = require('co');
+
 /**
  *  Generic require login routing middleware.
  */
@@ -27,7 +31,7 @@ exports.user = {
 
 
 /**
- *  Admin authorization routing middleware
+ *  Admin authorization routing middleware.
  */
 
 exports.admin = {
@@ -44,7 +48,7 @@ exports.admin = {
 };
 
 /**
- *  Article authorization routing middleware
+ *  Article authorization routing middleware.
  */
 
 exports.article = {
@@ -58,7 +62,7 @@ exports.article = {
 };
 
 /**
- * Comment authorization routing middleware
+ * Comment authorization routing middleware.
  */
 
 exports.comment = {
@@ -72,4 +76,19 @@ exports.comment = {
             res.redirect('/articles/' + req.article.id);
         }
     }
+};
+
+/**
+ *  Giftcard authorization routing middleware.
+ */
+
+exports.giftcard = {
+    hasAuthorization: async (function* (req, res, next) {
+        const giftcard = yield Giftcards.load(req.param('giftId'));
+        if (giftcard.user._id + '' != req.user._id + '') {
+            req.flash('info', 'You are not authorized');
+            return res.redirect('/giftcards/' + req.param('giftId'));
+        }
+        next();
+    })
 };

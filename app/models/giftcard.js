@@ -49,7 +49,7 @@ GiftCardsSchema.statics = {
      * @returns {Promise|Array|{index: number, input: string}|*}
      */
     list: function (options) {
-        return this.find(options).populate('user', 'name username')
+        return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }])
                     .exec();
     },
 

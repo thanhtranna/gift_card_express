@@ -4,8 +4,9 @@ block main
     h1= title
 
 block content
-    h3
-        a(href="/giftcards/new") Create new gift card
+    //- if (req.isAuthenticated())
+    //    h3
+    //        a(href="/giftcards/new") Create new gift card
 
     - if (giftcards.length)
         - each item in giftcards
@@ -16,13 +17,9 @@ block content
                 span Poster: &nbsp;
                 - var name = item.user.name ? item.user.name : item.user.username
                 a(href="/users/" + item.user._id)= name
-
-            form(action="/giftcards/" + item._id, method="post", onsubmit="return confirm('Are you sure?')")
-                input(type='hidden', name='_csrf', value="#{csrf_token}")
-                a.btn.btn-default(href='/giftcards/' + item._id + '/edit', title="edit") Edit
-                | &nbsp;
-                input(type="hidden", name="_method", value="DELETE")
-                button.btn.btn-danger(type="submit") Delete
+            h4
+                a(href="/users/" + item.user._id) Buy now
     - else
-        h4.muted No Category.&nbsp;
-            a(href="/giftcards/new") Create one
+        - if(req.isAuthenticated())
+            h4.muted No Category.&nbsp;
+                a(href="/giftcards/new") Create one
