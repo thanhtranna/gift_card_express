@@ -6,6 +6,7 @@ const fs = require('fs');
 const { respond, respondOrRedirect } = require('../utils');
 const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
+const Order = mongoose.model('Order');
 
 /**
  * List all gift cards
@@ -15,7 +16,6 @@ exports.index = async(function* (req, res) {
     const options = {
         status : 1,
         user : { $ne : req.user }
-
     };
     const giftcards = yield GiftCards.list(options);
     respond(res, 'giftcards/index', {
@@ -92,13 +92,16 @@ exports.create = async(function*(req, res) {
 /**
  * Show detail gift card
  */
-
-exports.show = async(function*(req, res) {
-    console.log('Show gift card:=----------------------');
-    const giftcard = yield GiftCards.load(req.param('giftId'));
+exports.show = async(function* (req, res) {
+    const giftcard = yield Giftcards.load(req.param('giftId'));
+    const options = {
+        giftcard: giftcard._id
+    }
+    const giftcardOrders = yield Order.list(options);
     respond(res, 'giftcards/show', {
         title: 'Show gift card detail',
-        giftcard: giftcard
+        giftcard: giftcard,
+        giftcardOrders: giftcardOrders
     });
 });
 
@@ -228,12 +231,13 @@ exports.destroy = async(function*(req, res) {
 });
 
 /**
- * Update gift card
+ * Sell gift card
  */
 
 exports.sell = async(function* (req, res){
     const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0
+
     try {
         if (giftcard.saveGiftcard()) {
             respondOrRedirect({ req, res }, '/giftcards', giftcard, {
@@ -247,4 +251,16 @@ exports.sell = async(function* (req, res){
             giftcard
         }, 422);
     }
+});
+
+/**
+ * Buy gift card
+ */
+exports.confirmBuy = async(function* (req, res){
+    const giftcard = yield Giftcards.load(req.body.giftId);
+    respond(res, 'orders/confirm', {
+        title: 'Confirm orders gift card',
+        price: req.body.price,
+        giftcard: giftcard
+    });
 });

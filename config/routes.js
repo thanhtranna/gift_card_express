@@ -8,7 +8,7 @@ const flash = require('express-flash');
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
-
+const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
 
@@ -124,7 +124,7 @@ module.exports = function (app, passport) {
     app.put('/articles/:id', articleAuth, articles.update);
     app.delete('/articles/:id', articleAuth, articles.destroy);
 
-    // gift card route
+    // gift card routes
     app.get('/giftcards', auth.requiresLogin, giftcards.giftcardByUser);
     app.get('/giftcards/new', auth.requiresLogin, giftcards.new);
     app.post('/giftcards', auth.requiresLogin, giftcards.create);
@@ -133,12 +133,18 @@ module.exports = function (app, passport) {
     app.put('/giftcards/:giftId', giftcardAuth, giftcards.update);
     app.delete('/giftcards/:giftId', giftcardAuth, giftcards.destroy);
     app.post('/giftcards/sell', giftcardAuth, giftcards.sell);
+    app.post('/giftcards/confirm-buy', auth.requiresLogin, giftcards.confirmBuy);
 
-    // gift card admin route
+    // gift card admin routes
     adminAuth
     app.get('/admin/giftcards', adminAuth, giftcardsAdmin.index);
     app.put('/admin/giftcards/:giftId/auth_gift', giftcardsAdmin.authGift);
 
+    // order routes
+    app.post('/orders/order', auth.requiresLogin, orders.order);
+    app.get('/orders/list', auth.requiresLogin, orders.index);
+    app.get('/orders/sell-order', auth.requiresLogin, orders.sellOrder);
+    app.get('/orders/buy-order', auth.requiresLogin, orders.buyOrder);
 
     // home route
     app.get('/', giftcards.index);

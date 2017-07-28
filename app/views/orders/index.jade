@@ -1,0 +1,20 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    - if (orders.length)
+        - each item in orders
+            h3 Name of gift:  #{item.giftcard.name}
+            h4 Description:  #{item.giftcard.description}
+            h4 Price buy:  #{item.price}
+            h4 Picture: No image ^^!
+            - if (item.bought == 0)
+                h4 Status: Waiting...
+            - else
+                h4 Status: Bought!
+    - else
+        - if(req.isAuthenticated())
+            h4.muted No order!.&nbsp;
+                a(href="/") Buy now
