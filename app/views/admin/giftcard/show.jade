@@ -1,0 +1,27 @@
+extends ../layouts/default
+block main
+    h1= title
+
+block content
+    h3= giftcards.name
+    p  Category:
+        strong #{giftcards.category.name}
+    p  Description:
+        strong #{giftcards.description}
+    p  Min price:
+        strong #{giftcards.minPrice}
+    p  Max price :
+        strong #{giftcards.maxPrice}
+    p  Expires date:
+        strong #{giftcards.expiresAt}
+
+    -if (giftcards.status == 0)
+        p Tinh trang: Chua public
+    - else if (giftcards.status == 1)
+        p Tinh trang: Da public
+    - else
+        p Tinh trang: Da ban
+    - if (giftcards.authGift == 0)
+        p Gift card chua xac thuc
+    - else
+        p Gift card da xac thuc

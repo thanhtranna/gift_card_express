@@ -4,7 +4,7 @@ block main
     h1= title
 
 block content
-    - var action = '/categories'
+    - var action = '/admin/categories'
     - action += category.isNew ? '' : '/' + category._id
 
     .row
@@ -34,7 +34,7 @@ block content
 
                                 - each item in categories
                                     - if (item._id + "" == category.parent + "")
-                                        option( selected = true value = "#{item._id}") #{item.name}
+                                        option( selected = true value ='#{item._id}') #{item.name}
                                     - else
                                         option( value = "#{item._id}") #{item.name}
                             - else
@@ -44,4 +44,4 @@ block content
                     .col-sm-offset-2.col-sm-10
                         button.btn.btn-primary(type='submit') Save
                         | &nbsp;
-                        a.btn(href='/categories', title="cancel") Cancel
+                        a.btn(href='/admin/categories', title="cancel") Cancel

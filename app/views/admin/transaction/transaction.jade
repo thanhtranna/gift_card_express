@@ -1,0 +1,27 @@
+extends ../layouts/default
+block main
+    h3= title
+
+block content
+    .col-md-10.portfolio-item
+        .row.pad-vert-mini
+        .row
+            each transaction , i in transactions
+                .col-sm-6.col-md-4
+                    .thumbnail
+                        .caption
+                            p.description
+                                strong Category
+                            p.description
+                                strong User Buy:
+
+                            p.description
+                                strong User sell:
+
+                            p.description
+                                strong Price:
+
+                            p.description
+                                | Description:
+                                strong #{transaction.descriptions}
+

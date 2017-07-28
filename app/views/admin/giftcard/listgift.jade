@@ -1,0 +1,23 @@
+extends ../layouts/default
+block main
+    h3= title
+
+block content
+    .col-md-10.portfolio-item
+        .row.pad-vert-mini
+        .row
+            each giftcard , i in giftcards
+                .col-sm-6.col-md-4
+                    .thumbnail
+                        img.img-responsive(src='https://dnrzlv4wd9rbi.cloudfront.net/assets/product-sources/75/medium/itunes-gift-card.png?1470324371', alt='Buy iTunes Gift Card', data-src='https://dnrzlv4wd9rbi.cloudfront.net/assets/product-sources/75/medium/itunes-gift-card.png?1470324371')
+                        .caption
+                            p.description
+                                a(href='/admin/listgift/#{giftcard._id}') Name:  #{giftcard.name}
+                            p.description
+                                | User :
+                                a(href='/userinfo')  #{giftcard.user.name}
+                            p.description
+                                | Price:
+                                strong #{giftcard.maxPrice}
+
+

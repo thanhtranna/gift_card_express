@@ -5,14 +5,13 @@
  */
 
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 /**
  * Gift card Schema
  */
 
-const GiftcardsSchema = new Schema({
+const GiftCardsSchema = new Schema({
     name: { type: String, default: '', trim: true },
     category: { type: Schema.ObjectId, ref: 'Categories' },
     image: { type: String, default: '', trim: true },
@@ -32,19 +31,18 @@ const GiftcardsSchema = new Schema({
  * @type {{}}
  */
 
-GiftcardsSchema.methods = {
+GiftCardsSchema.methods = {
     saveGiftcard: function () {
-        // console.log(image);
         // code upload image
         return this.save();
-    },
+    }
 };
 
 /**
  * Statics
  */
 
-GiftcardsSchema.statics = {
+GiftCardsSchema.statics = {
     /**
      * Get list gift card
      * @param options
@@ -69,8 +67,8 @@ GiftcardsSchema.statics = {
      * @param id
      */
     listIdGiftcardByUser: function (options) {
-        return this.find(options).select({ _id: 1 }).exec();
+        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
     }
 };
 
-mongoose.model('Giftcard', GiftcardsSchema);
+mongoose.model('GiftCards', GiftCardsSchema);
