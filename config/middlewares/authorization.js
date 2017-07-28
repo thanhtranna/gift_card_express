@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Giftcards = mongoose.model('Giftcard');
+const Giftcards = mongoose.model('GiftCards');
 const { wrap: async } = require('co');
 
 /**
@@ -42,7 +42,7 @@ exports.admin = {
             next();
         } else {
             req.flash('info', 'You are not authorized');
-            return res.redirect('/');
+            return res.redirect('back');
         }
     }
 };

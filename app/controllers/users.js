@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const asynct = require('async');
@@ -15,46 +16,46 @@ const User = mongoose.model('User');
  * Load
  */
 
-exports.load = async(function* (req, res, next, _id) {
-  const criteria = { _id };
-  try {
-    req.profile = yield User.load({ criteria });
-    if (!req.profile) return next(new Error('User not found'));
-  } catch (err) {
-    return next(err);
-  }
-  next();
+exports.load = async(function*(req, res, next, _id) {
+    const criteria = { _id };
+    try {
+        req.profile = yield User.load({ criteria });
+        if (!req.profile) return next(new Error('User not found'));
+    } catch (err) {
+        return next(err);
+    }
+    next();
 });
 
 /**
  * Create user
  */
 
-exports.create = async(function* (req, res) {
-  const user = new User(req.body);
-  console.log('User create: ', user);
-  user.provider = 'local';
-  try {
-    yield user.save();
-    req.logIn(user, err => {
-      if (err) req.flash('info', 'Sorry! We are not able to log you in!');
-      // Response and redirect homepage.
-      console.log('Dang Nhap thanh cong.');
-      return respondOrRedirect({ req, res }, '/', {}, {
-        type: 'info',
-        text: 'Sorry! We are not able to log you in!'
-      });
-    });
-  } catch (err) {
-    const errors = Object.keys(err.errors)
-      .map(field => err.errors[field].message);
+exports.create = async(function*(req, res) {
+    const user = new User(req.body);
+    console.log('User create: ', user);
+    user.provider = 'local';
+    try {
+        yield user.save();
+        req.logIn(user, err => {
+            if (err) req.flash('info', 'Sorry! We are not able to log you in!');
+            // Response and redirect homepage.
+            console.log('Dang Nhap thanh cong.');
+            return respondOrRedirect({ req, res }, '/', {}, {
+                type: 'info',
+                text: 'Sorry! We are not able to log you in!'
+            });
+        });
+    } catch (err) {
+        const errors = Object.keys(err.errors)
+            .map(field => err.errors[field].message);
 
-    respond(res, 'users/signup', {
-        title: 'Sign up',
-        errors,
-        user
-    });
-  }
+        respond(res, 'users/signup', {
+            title: 'Sign up',
+            errors,
+            user
+        });
+    }
 });
 
 /**
@@ -62,15 +63,16 @@ exports.create = async(function* (req, res) {
  */
 
 exports.show = function (req, res) {
-  const user = req.profile;
-  console.log(user);
-  respond(res, 'users/show', {
-    title: user.name,
-    user: user
-  });
+    const user = req.profile;
+    console.log(user);
+    respond(res, 'users/show', {
+        title: user.name,
+        user: user
+    });
 };
 
-exports.signin = function () {};
+exports.signin = function () {
+};
 
 /**
  * Auth callback
@@ -84,9 +86,9 @@ exports.authCallback = login;
  */
 
 exports.login = function (req, res) {
-  respond(res, 'users/login', {
-    title: 'Login'
-  });
+    respond(res, 'users/login', {
+        title: 'Login'
+    });
 };
 
 
@@ -96,10 +98,10 @@ exports.login = function (req, res) {
  */
 
 exports.signup = function (req, res) {
-  respond(res, 'users/signup', {
-      title: 'Sign up',
-      user: new User()
-  });
+    respond(res, 'users/signup', {
+        title: 'Sign up',
+        user: new User()
+    });
 };
 
 /**
@@ -107,8 +109,8 @@ exports.signup = function (req, res) {
  */
 
 exports.logout = function (req, res) {
-  req.logout();
-  res.redirect('/');
+    req.logout();
+    res.redirect('/');
 };
 
 /**
@@ -314,13 +316,14 @@ exports.session = login;
 function login (req, res) {
     console.log('Req session: ');
     console.log(req.session);
-  const redirectTo = req.session.returnTo
-    ? req.session.returnTo
-    : '/';
-  delete req.session.returnTo;
-  // res.redirect(redirectTo);
-  respondOrRedirect({ req, res }, redirectTo, {}, {
-     type: 'success',
-     text: 'Login successfully'
-  });
+    const redirectTo = req.session.returnTo
+        ? req.session.returnTo
+        : '/';
+    delete req.session.returnTo;
+    req.session.user.cart = {};
+    // res.redirect(redirectTo);
+    respondOrRedirect({ req, res }, redirectTo, {}, {
+        type: 'success',
+        text: 'Login successfully'
+    });
 }

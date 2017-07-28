@@ -11,6 +11,7 @@ const articles = require('../app/controllers/articles');
 
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
+const cart = require('../app/controllers/cart');
 const giftcardsAdmin = require('../app/controllers/admin/giftcards');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
@@ -39,11 +40,11 @@ module.exports = function (app, passport) {
     const pauth = passport.authenticate.bind(passport);
 
     // admin routes.
-    app.get('/admin', adminUser.index);
-    app.get('/admin/users', adminUser.users);
-    app.get('/admin/user/edit/:userId', adminUser.editUserById);
-    app.post('/admin/user/edit/:userId', adminUser.updateUserById);
-    app.post('/admin/user/delete', adminUser.deleteUserById);
+    // app.get('/admin', adminUser.index);
+    // app.get('/admin/users', adminUser.users);
+    // app.get('/admin/user/edit/:userId', adminUser.editUserById);
+    // app.post('/admin/user/edit/:userId', adminUser.updateUserById);
+    // app.post('/admin/user/delete', adminUser.deleteUserById);
 
     // admin users management routes.
     app.get('/admin', adminAuth, adminUser.index);
@@ -62,6 +63,9 @@ module.exports = function (app, passport) {
     app.get('/admin/categories/:catId/edit', adminAuth, categories.edit);
     app.put('/admin/categories/:catId', adminAuth, categories.update);
     app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
+
+    // router shopping cart.
+    app.get('/add-to-cart/:idCart', auth.requiresLogin, cart.add);
 
     // user routes
     app.get('/login', users.login);
@@ -129,10 +133,8 @@ module.exports = function (app, passport) {
     app.post('/giftcards/sell', giftcardAuth, giftcards.sell);
 
     // gift card admin route
-    adminAuth
     app.get('/admin/giftcards', adminAuth, giftcardsAdmin.index);
     app.put('/admin/giftcards/:giftId/auth_gift', giftcardsAdmin.authGift);
-
 
     // home route
     app.get('/', giftcards.index);

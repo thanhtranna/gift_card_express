@@ -50,7 +50,7 @@ block content
                 .form-group
                     label.col-sm-2.control-label(for='expiresAt') Expires Date
                     .col-sm-10
-                        input.form-control#expiresAt(type='date', name="expiresAt",  placeholder='Enter the min price', value=#{moment(giftcard.expiresAt).format('DD-MM-YYYY')})
+                        input.form-control#expiresAt(type='date', name="expiresAt",  placeholder='Enter the min price', value=moment(giftcard.expiresAt).format('DD-MM-YYYY'))
                 .form-group
                     .col-sm-offset-2.col-sm-10
                         input.btn.btn-primary(type='submit', value='Save')

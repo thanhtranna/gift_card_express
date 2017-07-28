@@ -18,8 +18,8 @@ block content
                 - var name = item.user.name ? item.user.name : item.user.username
                 a(href="/users/" + item.user._id)= name
             h4
-                a(href="/users/" + item.user._id) Buy now
+                a.btn.btn-success(href='/add-to-cart/'+item._id) Add to Shopping Cart
     - else
         - if(req.isAuthenticated())
-            h4.muted No Category.&nbsp;
+            h4.muted No Giftcard.&nbsp;
                 a(href="/giftcards/new") Create one
