@@ -1,8 +1,7 @@
 
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
-const { respond , respondOrRedirect } = require('../../utils');
-const User = mongoose.model('User');
+// const { respond , respondOrRedirect } = require('../../utils');
 const Transaction = mongoose.model('Transaction');
 
 /**

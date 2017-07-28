@@ -14,10 +14,10 @@ const Categories = mongoose.model('Categories');
 exports.index = async(function* (req, res) {
     const options = {
         status : 1,
-        user : {$ne : req.user}
+        user : { $ne : req.user }
 
     };
-    const giftcards = yield Giftcards.list(options);
+    const giftcards = yield GiftCards.list(options);
     respond(res, 'giftcards/index', {
         title: 'List Gift cards',
         giftcards: giftcards,
@@ -31,7 +31,7 @@ exports.giftcardByUser = async(function* (req, res) {
     const options = {
         user : req.user
     };
-    const giftcards = yield Giftcards.list(options);
+    const giftcards = yield GiftCards.list(options);
     respond(res, 'giftcards/list_gift_by_user', {
         title: 'List Gift cards',
         giftcards: giftcards,
@@ -232,7 +232,7 @@ exports.destroy = async(function*(req, res) {
  */
 
 exports.sell = async(function* (req, res){
-    const giftcard = yield Giftcards.load(req.param('giftId'));
+    const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0
     try {
         if (giftcard.saveGiftcard()) {

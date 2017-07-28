@@ -3,7 +3,7 @@ const { wrap: async } = require('co');
 const path = require('path');
 const pathName = path.join((process.cwd() + ' ').trim(), '/app/utils');
 const { respond, respondOrRedirect  } = require(pathName);
-const Giftcards = mongoose.model('Giftcard');
+const Giftcards = mongoose.model('GiftCards');
 // const Categories = mongoose.model('Categories');
 
 
