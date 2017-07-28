@@ -1,0 +1,17 @@
+giftcard.giftcard
+
+    h3
+        a(href="/giftcards/#{item._id}")  #{item.name}
+    h5= item.description
+    - if (item.user)
+        span Poster: &nbsp;
+        - var name = item.user.name ? item.user.name : item.user.username
+        a(href="/users/" + item.user._id)= name
+
+    form(action="/giftcards/" + item._id, method="post", onsubmit="return confirm('Are you sure?')")
+        input(type='hidden', name='_csrf', value="#{ csrf_token }")
+        - if (item.status == 0)
+            a.btn.btn-default(href='/admin/giftcards/' + item._id + '/auth_gift', title="auth gift") Authenticate
+            | &nbsp;
+        input(type="hidden", name="_method", value="DELETE")
+        button.btn.btn-danger(type="submit") Delete
