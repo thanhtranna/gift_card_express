@@ -11,6 +11,8 @@ const articles = require('../app/controllers/articles');
 const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
+const giftCardsAdmin = require('../app/controllers/admin/giftcards');
+
 
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
@@ -23,9 +25,8 @@ const auth = require('./middlewares/authorization');
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
-const giftcardsAdmin = require('../app/controllers/admin/giftcards');
 const transactions = require('../app/controllers/admin/transaction');
-const giftcardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
+const giftCardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
 
 const fail = {
     failureRedirect: '/login'
@@ -40,12 +41,12 @@ module.exports = function (app, passport) {
 
     const pauth = passport.authenticate.bind(passport);
 
-    // admin routes
-    app.get('/admin', adminUser.index);
-    app.get('/admin/users', adminUser.users);
-    app.get('/admin/user/edit/:userId', adminUser.editUserById);
-    app.post('/admin/user/edit/:userId', adminUser.updateUserById);
-    app.post('/admin/user/delete', adminUser.deleteUserById);
+    // admin routes.
+    // app.get('/admin', adminUser.index);
+    // app.get('/admin/users', adminUser.users);
+    // app.get('/admin/user/edit/:userId', adminUser.editUserById);
+    // app.post('/admin/user/edit/:userId', adminUser.updateUserById);
+    // app.post('/admin/user/delete', adminUser.deleteUserById);
 
     // admin routes
 
@@ -68,6 +69,9 @@ module.exports = function (app, passport) {
     app.get('/admin/categories/:catId/edit', adminAuth, categories.edit);
     app.put('/admin/categories/:catId', adminAuth, categories.update);
     app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
+
+    // router shopping cart.
+    app.get('/add-to-cart/:idCart', auth.requiresLogin);
 
     // user routes
     app.get('/login', users.login);
@@ -129,16 +133,15 @@ module.exports = function (app, passport) {
     app.get('/giftcards/new', auth.requiresLogin, giftcards.new);
     app.post('/giftcards', auth.requiresLogin, giftcards.create);
     app.get('/giftcards/:giftId', giftcards.show);
-    app.get('/giftcards/:giftId/edit', giftcardAuth, giftcards.edit);
-    app.put('/giftcards/:giftId', giftcardAuth, giftcards.update);
-    app.delete('/giftcards/:giftId', giftcardAuth, giftcards.destroy);
-    app.post('/giftcards/sell', giftcardAuth, giftcards.sell);
+    app.get('/giftcards/:giftId/edit', giftCardAuth, giftcards.edit);
+    app.put('/giftcards/:giftId', giftCardAuth, giftcards.update);
+    app.delete('/giftcards/:giftId', giftCardAuth, giftcards.destroy);
+    app.post('/giftcards/sell', giftCardAuth, giftcards.sell);
     app.post('/giftcards/confirm-buy', auth.requiresLogin, giftcards.confirmBuy);
 
     // gift card admin routes
-    adminAuth
-    app.get('/admin/giftcards', adminAuth, giftcardsAdmin.index);
-    app.put('/admin/giftcards/:giftId/auth_gift', giftcardsAdmin.authGift);
+    app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
+    app.put('/admin/giftcards/:giftId/auth_gift', giftCardsAdmin.authGift);
 
     // order routes
     app.post('/orders/order', auth.requiresLogin, orders.order);

@@ -42,7 +42,7 @@ exports.admin = {
             next();
         } else {
             req.flash('info', 'You are not authorized');
-            return res.redirect('/');
+            return res.redirect('back');
         }
     }
 };

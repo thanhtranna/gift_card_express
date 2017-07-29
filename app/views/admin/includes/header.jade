@@ -1,3 +1,44 @@
+<<<<<<< HEAD
+nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+  .container
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/admin') Admin
+    .collapse.navbar-collapse
+      ul.nav.navbar-nav
+        //li(class=isActive('/articles/new') ? 'active' : '')
+          //a(href="/articles/new", title="new article") New
+        li
+          a(href="/admin/users", title="Users") Users
+        li
+          a(href="/admin/categories", title="Category") Category
+        li
+          a(href="/admin/giftcards", title="Category") Gift card
+
+      //form.nav.navbar-form.navbar-right.search-form(action='')
+      //  .form-group.has-feedback
+      //    //label.sr-only(for='search') Search
+      //    input#search.form-control(type='text', name='search', placeholder='Search')
+      //    span.glyphicon.glyphicon-search.form-control-feedback
+
+      ul.nav.navbar-nav.navbar-right
+        li
+          a.user-profile.dropdown-toggle(data-toggle='dropdown', aria-expanded='true')
+            img(src='/img/user.jpg', alt='', style='width: 30px; height: 30px; line-height: 32px; border-radius: 50%; margin-right: 10px;')
+            | #{req.user.name} &nbsp;
+            span.fa.fa-angle-down
+          ul.dropdown-menu.dropdown-usermenu.pull-right
+            li
+              a(href='/admin/user/profile')  Profile
+            li
+              a(href='/logout')
+                i.fa.fa-sign-out.pull-right
+                |  Log Out
+=======
 nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
   .container
     .navbar-header
@@ -32,3 +73,4 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
           //label.sr-only(for='search') Search
           input#search.form-control(type='text', name='search', placeholder='Search')
           span.glyphicon.glyphicon-search.form-control-feedback
+>>>>>>> 7125c47a673cd7f191cdb152095e7cb9ce374f12

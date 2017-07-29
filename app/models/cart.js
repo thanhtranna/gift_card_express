@@ -2,7 +2,7 @@
  * Created by tranthanhit on 24/07/2017.
  */
 
-module.exports = function Cart(oldCart) {
+module.exports = function Cart (oldCart) {
     this.items = oldCart.items || {};
     this.totalQty = oldCart.totalQty || 0;
     this.totalPrice = oldCart.totalPrice || 0;
@@ -20,17 +20,17 @@ module.exports = function Cart(oldCart) {
             };
         }
         storedItem.qty++;
-        storedItem.price = storedItem.item.price * storedItem.qty;
+        storedItem.price = storedItem.item.maxPrice * storedItem.qty;
         this.totalQty++;
-        this.totalPrice += storedItem.item.price;
+        this.totalPrice += storedItem.item.maxPrice;
     };
 
     // Reduce one item by id.
     this.reduceByOne = function (id) {
         this.items[id].qty--;
-        this.items[id].price -= this.items[id].item.price;
+        this.items[id].price -= this.items[id].item.maxPrice;
         this.totalQty--;
-        this.totalPrice -= this.items[id].item.price;
+        this.totalPrice -= this.items[id].item.maxPrice;
 
         if (this.items[id].qty <= 0) {
             delete this.items[id];
@@ -43,6 +43,7 @@ module.exports = function Cart(oldCart) {
         this.totalPrice -= this.items[id].price;
         delete this.items[id];
     };
+
     // GenerateArray.
     this.generateArray = function () {
         var arr = [];

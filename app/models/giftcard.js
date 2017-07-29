@@ -16,7 +16,7 @@ const GiftCardsSchema = new Schema({
     category: { type: Schema.ObjectId, ref: 'Categories' },
     image: { type: String, default: '', trim: true },
     description: { type: String, default: '', trim: true },
-    user: { type : Schema.ObjectId, ref : 'User' },
+    user: { type: Schema.ObjectId, ref: 'User' },
     maxPrice: { type: Number, default: 0, min: 0 },
     minPrice: { type: Number, default: 0, min: 0 },
     expiresAt: { type: Date, default: Date.now },
@@ -48,9 +48,13 @@ GiftCardsSchema.statics = {
      * @param options
      * @returns {Promise|Array|{index: number, input: string}|*}
      */
+
     list: function (options) {
-        return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }])
-                    .exec();
+        return this.find(options).populate([{ path: 'user', select: '_id name username' }, {
+            path: 'category',
+            select: 'name'
+        }])
+            .exec();
     },
 
     /**
@@ -58,16 +62,26 @@ GiftCardsSchema.statics = {
      * @param id
      * @returns {Promise}
      */
-    load: function (id){
+
+    load: function (id) {
         return this.findOne({ _id: id }).populate('user', 'name username').exec();
     },
 
     /**
+<<<<<<< HEAD
+     * Get giftcards by id.
+     * @param id
+     */
+
+    findById: function (options) {
+        return this.findOne(options).exec();
+=======
      * Get list Id gift cart by Id user
      * @param id
      */
     listIdGiftcardByUser: function (options) {
         return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
+>>>>>>> 7125c47a673cd7f191cdb152095e7cb9ce374f12
     }
 };
 
