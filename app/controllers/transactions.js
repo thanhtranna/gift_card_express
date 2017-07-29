@@ -18,7 +18,7 @@ exports.transaction = async(function* (req, res) {
     giftcard.status = 2;
     try {
         if (transaction.saveTransactions() && order.saveOrder() && giftcard.saveGiftcard()) {
-            respondOrRedirect({ req, res }, '/giftcards/show', transaction, {
+            respondOrRedirect({ req, res }, '/giftcards', transaction, {
                 type: 'success',
                 text: 'Successfully transaction order!'
             });

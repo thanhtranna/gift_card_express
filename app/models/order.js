@@ -48,7 +48,7 @@ OrderSchema.statics = {
      */
 
     list: function (options) {
-        return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image' }]).exec();
+        return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image status' }]).exec();
     },
 
     /**
@@ -57,11 +57,16 @@ OrderSchema.statics = {
      * @returns {Promise}
      */
     load: function (id){
-        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image' }]).exec();
+        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image status' }]).exec();
     },
 
     listByUser: function (condition, arrIn) {
-        return this.find().where(condition).in(arrIn);
+        return this.find()
+            .populate([
+                { path: 'user', select: 'name username' },
+                { path: 'giftcard', select: '_id name description image status' }])
+            .where(condition)
+            .in(arrIn);
     }
 };
 

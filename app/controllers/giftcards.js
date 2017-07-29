@@ -14,8 +14,8 @@ const Order = mongoose.model('Order');
 
 exports.index = async(function* (req, res) {
     console.log('Req User: ', req.user);
-    // List giftcards with status = 1.
-    const giftcards = yield GiftCards.list({ status : 1 });
+    // List giftcards with status = 1 and without giftcard of current user.
+    const giftcards = yield GiftCards.list({ status : 1, user: { $ne: req.user } });
     // const options = {
     //     status : 1,
     //     user : { $ne : req.user }
@@ -72,9 +72,9 @@ exports.create = async(function*(req, res) {
     giftcard.maxPrice = req.body.maxPrice;
     giftcard.minPrice = req.body.minPrice;
     giftcard.expiresAt = req.body.expiresAt;
-    console.log('Gift Card: ', giftcard);
-    console.log('File upload: ',req.file);
-    console.log('Path upload file: ', path.join((process.cwd() + ' ').trim(), '/uploads'));
+    // console.log('Gift Card: ', giftcard);
+    // console.log('File upload: ',req.file);
+    // console.log('Path upload file: ', path.join((process.cwd() + ' ').trim(), '/uploads'));
 
     try {
         if (giftcard.saveGiftcard()) {
