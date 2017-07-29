@@ -28,20 +28,20 @@ exports.index = async(function* (req, res) {
     // }
     // load giftcart with status = 1.
     // const giftcards = yield GiftCards.list(optionsOne ? optionsOne : optionsTwo );
-    var cart = new Cart(req.user.cart ? req.user.cart : {});
+    // var cart = new Cart(req.user.cart ? req.user.cart : {});
+    console.log('123123123');
     // Assign cart to session.
-    req.user.cart = cart;
+    // req.user.cart = cart;
     // Delete field session.
-    delete req.user.cart.add;
-    delete req.user.cart.reduceByOne;
-    delete req.user.cart.removeItem;
-    delete req.user.cart.generateArray;
+    // delete req.user.cart.add;
+    // delete req.user.cart.reduceByOne;
+    // delete req.user.cart.removeItem;
+    // delete req.user.cart.generateArray;
     // List giftcards with status = 1.
     const giftcards = yield GiftCards.list({ status : 1 });
     respond(res, 'giftcards/index', {
         title: 'List Gift cards',
-        giftcards: giftcards,
-        cart: cart
+        giftcards: giftcards
     });
 });
 

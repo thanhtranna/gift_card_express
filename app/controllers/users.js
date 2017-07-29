@@ -320,7 +320,6 @@ function login (req, res) {
         ? req.session.returnTo
         : '/';
     delete req.session.returnTo;
-    req.session.user.cart = {};
     // res.redirect(redirectTo);
     respondOrRedirect({ req, res }, redirectTo, {}, {
         type: 'success',
