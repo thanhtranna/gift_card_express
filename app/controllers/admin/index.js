@@ -3,9 +3,11 @@
  */
 
 const mongoose = require('mongoose');
-// const { wrap: async } = require('co');
+const { wrap: async } = require('co');
 const { respond , respondOrRedirect } = require('../../utils');
 const User = mongoose.model('User');
+const GiftCard = mongoose.model('GiftCards');
+
 
 /**
  * Load
@@ -231,3 +233,25 @@ exports.deleteUserById = (req, res) => {
         }
     });
 };
+/**
+ * List GiftCard
+ */
+exports.listgift = async(function* (req, res) {
+    const options = {};
+    const giftcards = yield GiftCard.list(options);
+    respond(res, 'admin/giftcard/listgift', {
+        title: 'List GiftCard',
+        giftcards: giftcards
+    });
+});
+
+/**
+ * show detail
+ */
+exports.show = async(function* (req, res) {
+    const giftcards = yield GiftCard.load(req.param('giftId'));
+    respond(res, 'admin/giftcard/show', {
+        title: 'Show gift card detail',
+        giftcards: giftcards
+    });
+});

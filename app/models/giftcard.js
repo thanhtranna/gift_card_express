@@ -19,11 +19,11 @@ const GiftCardsSchema = new Schema({
     user: { type: Schema.ObjectId, ref: 'User' },
     maxPrice: { type: Number, default: 0, min: 0 },
     minPrice: { type: Number, default: 0, min: 0 },
-    createdAt: { type: Date, default: Date.now },
-    updateAt: { type: Date, default: Date.now },
     expiresAt: { type: Date, default: Date.now },
     status: { type: Number, default: 0 },
-    authGift: { type: Number, default: 0 }
+    authGift: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now },
+    updateAt: { type: Date, default: Date.now }
 });
 
 /**
@@ -68,12 +68,20 @@ GiftCardsSchema.statics = {
     },
 
     /**
+<<<<<<< HEAD
      * Get giftcards by id.
      * @param id
      */
 
     findById: function (options) {
         return this.findOne(options).exec();
+=======
+     * Get list Id gift cart by Id user
+     * @param id
+     */
+    listIdGiftcardByUser: function (options) {
+        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
+>>>>>>> 7125c47a673cd7f191cdb152095e7cb9ce374f12
     }
 };
 

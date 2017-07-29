@@ -4,9 +4,9 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const { respond, respondOrRedirect } = require('../utils');
-const Cart = require('../models/cart');
 const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
+const Order = mongoose.model('Order');
 
 /**
  * List all gift cards
@@ -14,31 +14,13 @@ const Categories = mongoose.model('Categories');
 
 exports.index = async(function* (req, res) {
     console.log('Req User: ', req.user);
-    // Condition.
-
-    // if (req.user) {
-    //     var optionsOne = {
-    //         status : 1,
-    //         user : { $eq : req.user._id }
-    //     };
-    // } else {
-    //     var optionsTwo = {
-    //         status : 1
-    //     };
-    // }
-    // load giftcart with status = 1.
-    // const giftcards = yield GiftCards.list(optionsOne ? optionsOne : optionsTwo );
-    // var cart = new Cart(req.user.cart ? req.user.cart : {});
-    console.log('123123123');
-    // Assign cart to session.
-    // req.user.cart = cart;
-    // Delete field session.
-    // delete req.user.cart.add;
-    // delete req.user.cart.reduceByOne;
-    // delete req.user.cart.removeItem;
-    // delete req.user.cart.generateArray;
     // List giftcards with status = 1.
     const giftcards = yield GiftCards.list({ status : 1 });
+    // const options = {
+    //     status : 1,
+    //     user : { $ne : req.user }
+    // };
+    // const giftcards = yield GiftCards.list(options);
     respond(res, 'giftcards/index', {
         title: 'List Gift cards',
         giftcards: giftcards
@@ -116,12 +98,16 @@ exports.create = async(function*(req, res) {
  * Show detail gift card
  */
 
-exports.show = async(function*(req, res) {
-    console.log('Show gift card:----------------------');
+exports.show = async(function* (req, res) {
     const giftcard = yield GiftCards.load(req.param('giftId'));
+    const options = {
+        giftcard: giftcard._id
+    };
+    const giftcardOrders = yield Order.list(options);
     respond(res, 'giftcards/show', {
         title: 'Show gift card detail',
-        giftcard: giftcard
+        giftcard: giftcard,
+        giftcardOrders: giftcardOrders
     });
 });
 
@@ -251,13 +237,13 @@ exports.destroy = async(function*(req, res) {
 });
 
 /**
- * Update gift card
+ * Sell gift card
  */
 
 exports.sell = async(function* (req, res){
     const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0;
-    console.log('Gift Card: ', giftcard);
+
     try {
         if (giftcard.saveGiftcard()) {
             respondOrRedirect({ req, res }, '/giftcards', giftcard, {
@@ -272,4 +258,16 @@ exports.sell = async(function* (req, res){
             giftcard
         }, 422);
     }
+});
+
+/**
+ * Buy gift card
+ */
+exports.confirmBuy = async(function* (req, res){
+    const giftcard = yield GiftCards.load(req.body.giftId);
+    respond(res, 'orders/confirm', {
+        title: 'Confirm orders gift card',
+        price: req.body.price,
+        giftcard: giftcard
+    });
 });

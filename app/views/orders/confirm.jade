@@ -1,0 +1,20 @@
+extends ../layouts/default
+
+block main
+    h1= title
+
+block content
+    h3 Name of gift card: #{giftcard.name}
+    h4 Description: #{giftcard.description}
+    h4 Price: #{giftcard.maxPrice}
+    h4 Hinh anh: No image ^^!
+    h4 Price order: #{price}
+    h4
+        form(action="/orders/order", method="post", onsubmit="return confirm('Do you want to buy this gift card?')")
+            input(type='hidden', name='_csrf', value='#{ csrf_token }')
+            input(type='hidden', name='price', value="#{ price }")
+            input(type='hidden', name='giftId', value="#{ giftcard._id }")
+            button.btn.btn-info(type="submit") CONFIRM
+
+
+

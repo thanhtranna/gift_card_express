@@ -8,11 +8,12 @@ const flash = require('express-flash');
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
-
+const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
-const cart = require('../app/controllers/cart');
-const giftcardsAdmin = require('../app/controllers/admin/giftcards');
+const giftCardsAdmin = require('../app/controllers/admin/giftcards');
+
+
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -24,7 +25,8 @@ const auth = require('./middlewares/authorization');
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
-const giftcardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
+const transactions = require('../app/controllers/admin/transaction');
+const giftCardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
 
 const fail = {
     failureRedirect: '/login'
@@ -46,7 +48,8 @@ module.exports = function (app, passport) {
     // app.post('/admin/user/edit/:userId', adminUser.updateUserById);
     // app.post('/admin/user/delete', adminUser.deleteUserById);
 
-    // admin users management routes.
+    // admin routes
+
     app.get('/admin', adminAuth, adminUser.index);
     app.get('/admin/users', adminAuth, adminUser.users);
     app.get('/admin/user/edit/:userId', adminAuth, adminUser.editUserById);
@@ -54,9 +57,12 @@ module.exports = function (app, passport) {
     app.post('/admin/user/profile', adminAuth, adminUser.updateAdminById);
     app.post('/admin/user/edit/:userId', adminAuth, adminUser.updateUserById);
     app.post('/admin/user/delete', adminAuth, adminUser.deleteUserById);
+    app.get('/admin/listgift', adminUser.listgift);
+    app.get('/admin/listgift/:giftId', adminUser.show);
+    app.get('/admin/transaction', transactions.transaction);
 
     // category routes. admin permission
-    app.get('/admin/categories', adminAuth, categories.index);
+    app.get('/admin/categories/', adminAuth, categories.index);
     app.get('/admin/categories/new', adminAuth, categories.new);
     app.post('/admin/categories', adminAuth, categories.create);
     app.get('/admin/categories/:catId', adminAuth, categories.show);
@@ -65,7 +71,7 @@ module.exports = function (app, passport) {
     app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
 
     // router shopping cart.
-    app.get('/add-to-cart/:idCart', auth.requiresLogin, cart.add);
+    app.get('/add-to-cart/:idCart', auth.requiresLogin);
 
     // user routes
     app.get('/login', users.login);
@@ -122,19 +128,26 @@ module.exports = function (app, passport) {
     app.put('/articles/:id', articleAuth, articles.update);
     app.delete('/articles/:id', articleAuth, articles.destroy);
 
-    // gift card route
+    // gift card routes
     app.get('/giftcards', auth.requiresLogin, giftcards.giftcardByUser);
     app.get('/giftcards/new', auth.requiresLogin, giftcards.new);
     app.post('/giftcards', auth.requiresLogin, giftcards.create);
     app.get('/giftcards/:giftId', giftcards.show);
-    app.get('/giftcards/:giftId/edit', giftcardAuth, giftcards.edit);
-    app.put('/giftcards/:giftId', giftcardAuth, giftcards.update);
-    app.delete('/giftcards/:giftId', giftcardAuth, giftcards.destroy);
-    app.post('/giftcards/sell', giftcardAuth, giftcards.sell);
+    app.get('/giftcards/:giftId/edit', giftCardAuth, giftcards.edit);
+    app.put('/giftcards/:giftId', giftCardAuth, giftcards.update);
+    app.delete('/giftcards/:giftId', giftCardAuth, giftcards.destroy);
+    app.post('/giftcards/sell', giftCardAuth, giftcards.sell);
+    app.post('/giftcards/confirm-buy', auth.requiresLogin, giftcards.confirmBuy);
 
-    // gift card admin route
-    app.get('/admin/giftcards', adminAuth, giftcardsAdmin.index);
-    app.put('/admin/giftcards/:giftId/auth_gift', giftcardsAdmin.authGift);
+    // gift card admin routes
+    app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
+    app.put('/admin/giftcards/:giftId/auth_gift', giftCardsAdmin.authGift);
+
+    // order routes
+    app.post('/orders/order', auth.requiresLogin, orders.order);
+    app.get('/orders/list', auth.requiresLogin, orders.index);
+    app.get('/orders/sell-order', auth.requiresLogin, orders.sellOrder);
+    app.get('/orders/buy-order', auth.requiresLogin, orders.buyOrder);
 
     // home route
     app.get('/', giftcards.index);
