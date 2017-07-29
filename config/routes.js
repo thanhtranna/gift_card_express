@@ -3,8 +3,14 @@
 /*
  * Module dependencies.
  */
+
 const csrf = require('csurf');
 const flash = require('express-flash');
+
+/**
+ *  Require file.
+ */
+
 const adminUser = require('../app/controllers/admin/index');
 const users = require('../app/controllers/users');
 const articles = require('../app/controllers/articles');
@@ -12,7 +18,7 @@ const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
 const giftCardsAdmin = require('../app/controllers/admin/giftcards');
-
+const transactions = require('../app/controllers/admin/transaction');
 
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
@@ -25,7 +31,6 @@ const auth = require('./middlewares/authorization');
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
-const transactions = require('../app/controllers/admin/transaction');
 const giftCardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
 
 const fail = {
