@@ -7,6 +7,7 @@ const Categories = mongoose.model('Categories');
 exports.index = async(function*(req, res) {
     const options = {};
     const categories = yield Categories.list(options);
+    console.log(categories);
     respond(res, 'admin/categories/index', {
         title: 'List Categories',
         categories: categories,

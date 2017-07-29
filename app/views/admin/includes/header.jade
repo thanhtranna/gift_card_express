@@ -29,7 +29,7 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
       //    span.glyphicon.glyphicon-search.form-control-feedback
 
       ul.nav.navbar-nav.navbar-right
-        li
+        li(style='cursor: pointer;')
           a.user-profile.dropdown-toggle(data-toggle='dropdown', aria-expanded='true')
             img(src='/img/user.jpg', alt='', style='width: 30px; height: 30px; line-height: 32px; border-radius: 50%; margin-right: 10px;')
             | #{req.user.name} &nbsp;

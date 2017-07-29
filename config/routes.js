@@ -75,6 +75,11 @@ module.exports = function (app, passport) {
     app.put('/admin/categories/:catId', adminAuth, categories.update);
     app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
 
+    // Router authenticate gift card.
+    app.get('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
+    app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
+    app.put('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
+
     // router shopping cart.
     app.get('/add-to-cart/:idCart', auth.requiresLogin);
 
@@ -143,10 +148,6 @@ module.exports = function (app, passport) {
     app.delete('/giftcards/:giftId', giftCardAuth, giftcards.destroy);
     app.post('/giftcards/sell', giftCardAuth, giftcards.sell);
     app.post('/giftcards/confirm-buy', auth.requiresLogin, giftcards.confirmBuy);
-
-    // gift card admin routes
-    app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
-    app.put('/admin/giftcards/:giftId/auth_gift', giftCardsAdmin.authGift);
 
     // order routes
     app.post('/orders/order', auth.requiresLogin, orders.order);

@@ -1,7 +1,7 @@
 extends ../layouts/default
 
 block main
-    h1= title
+    h3= title
 
 block content
     - var action = '/admin/categories'
@@ -38,7 +38,7 @@ block content
                                     - else
                                         option( value = "#{item._id}") #{item.name}
                             - else
-                                - console.log('ko co')
+                                - console.log('Khong co trong database')
 
                 .form-group
                     .col-sm-offset-2.col-sm-10

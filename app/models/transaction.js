@@ -23,7 +23,7 @@ const TransactionSchema = new mongoose.Schema({
     giftcard: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'GiftCard'
+            ref: 'GiftCards'
         }
     ],
     descriptions: {

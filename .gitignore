@@ -5,4 +5,3 @@ Makefile
 .DS_Store
 .env
 .idea
-/config/uploadFile.js

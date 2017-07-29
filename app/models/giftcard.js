@@ -50,7 +50,7 @@ GiftCardsSchema.statics = {
      */
 
     list: function (options) {
-        return this.find(options).populate([{ path: 'user', select: '_id name username' }, {
+        return this.find(options).populate([{ path: 'user', select: 'name username' }, {
             path: 'category',
             select: 'name'
         }])
@@ -76,11 +76,19 @@ GiftCardsSchema.statics = {
         return this.findOne(options).exec();
     },
 
-    /* Get list Id gift cart by Id user
+    /**
+     * Get list Id gift cart by Id user
      * @param id
      */
-    listIdGiftcardByUser: function (id) {
-        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
+
+    listIdGiftcardByUser: function (options) {
+        // return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
+        return this.find(options).populate([{ path: 'user', select: 'name username' }, {
+            path: 'category',
+            select: 'name'
+        }])
+        .select({ _id: 1 })
+        .exec();
     }
 };
 

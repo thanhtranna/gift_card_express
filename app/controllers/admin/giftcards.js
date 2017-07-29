@@ -6,7 +6,6 @@ const { respond, respondOrRedirect } = require(pathName);
 const GiftCards = mongoose.model('GiftCards');
 // const Categories = mongoose.model('Categories');
 
-
 /**
  * List gift cards
  */
@@ -23,12 +22,13 @@ exports.index = async(function*(req, res) {
 });
 
 /**
- * Auth gift card
+ * Auth gift card and set authGift = 1.
  */
 
 exports.authGift = async(function* (req, res) {
     const giftcard = yield GiftCards.load(req.param('giftId'));
-    giftcard.status = 1;
+    // Authentication giftcard.
+    giftcard.authGift = 1;
     try {
         if (giftcard.saveGiftcard()) {
             const options = {};
