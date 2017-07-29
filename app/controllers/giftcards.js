@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
-const path = require('path');
-const multer = require('multer');
-const fs = require('fs');
+// const path = require('path');
+// const multer = require('multer');
+// const fs = require('fs');
 const { respond, respondOrRedirect } = require('../utils');
-const GiftCards = mongoose.model('GiftCards');
+const GiftCards = mongoose.model('Giftcards');
 const Categories = mongoose.model('Categories');
 const Order = mongoose.model('Order');
 
@@ -93,7 +93,7 @@ exports.create = async(function*(req, res) {
  * Show detail gift card
  */
 exports.show = async(function* (req, res) {
-    const giftcard = yield Giftcards.load(req.param('giftId'));
+    const giftcard = yield GiftCards.load(req.param('giftId'));
     const options = {
         giftcard: giftcard._id
     }
@@ -137,84 +137,28 @@ exports.update = async(function*(req, res) {
     giftcard.maxPrice = req.body.maxPrice;
     giftcard.minPrice = req.body.minPrice;
     giftcard.expiresAt = (null == req.body.expiresAt) ? Date.now : req.body.expiresAt;
-    console.log('Giftcard: ',giftcard);
-    console.log('------------------------------------------------------------');
-    console.log('Path upload file: ', path.join((process.cwd() + ' ').trim(), '/uploads'));
-
-    const options = {};
-    const giftcards = yield GiftCards.list(options);
-
-    const MAGIC_NUMBERS = {
-        jpg: 'ffd8ffe0',
-        jpg1: 'ffd8ffe1',
-        png: '89504e47',
-        gif: '47494638'
-    };
-
-    const pathFile = path.join((process.cwd() + ' ').trim(), '/uploads');
-
-    // Storage file.
-    var storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, pathFile);
-        },
-        filename: function (req, file, cb) {
-            cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-        }
-    });
-
-    // Check magic numbers.
-    var checkMagicNumbers = ( magic ) => {
-        if (magic == MAGIC_NUMBERS.jpg || magic == MAGIC_NUMBERS.jpg1 || magic == MAGIC_NUMBERS.png || magic == MAGIC_NUMBERS.gif) return true;
-    };
+    console.log('expiressssssssssss: ' + giftcard.expiresAt);
 
     try {
-        var upload = multer({
-            storage: storage,
-            fileFilter: function (req, file, callback) {
-                var ext = path.extname(file.originalname);
-                if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-                    return callback('Only images are allowed', null);
-                }
-                callback(null, true);
-            }
-        }).single('image');
-        upload(req, res, (err) => {
-            var bitmap = fs.readFileSync(pathFile + '/' + req.file.filename).toString('hex', 0, 4);
-            if (!checkMagicNumbers(bitmap)) {
-                fs.unlinkSync(pathFile + '/' + req.file.filename);
-                console.log('qweoiqweioqwi');
-                res.end('File is no valid');
-            }
-            if (err) {
-                console.log('Co loi xay ra render lai trang listgift');
-                respondOrRedirect({ req, res }, '/giftcards', giftcards, {
-                    type: 'error',
-                    text: 'Upload image failed!!'
-                });
-            } else {
-                console.log('Upload successfully!!');
-                if (giftcard.saveGiftcard()) {
-                    console.log('Dang luu gift card!!');
-                    // const options = {};
-                    // const giftcards = yield GiftCards.list(options);
-                    respondOrRedirect({ req, res }, '/giftcards', giftcards, {
-                        type: 'success',
-                        text: 'Successfully update giftcard!'
-                    });
-                } else {
-                    console.log('Co loi xay ra.');
-                }
-            }
-        });
-    } catch (err) {
-        console.log('Co loi xay ra');
-        respond(res, 'giftcards/new', {
-            title: 'New giftcard',
-            errors: [err.toString()],
-            giftcard
-        }, 422);
-    }
+        if (giftcard.saveGiftcard()) {
+            console.log('Dang luu gift card!!');
+            const options = {};
+            const giftcards = yield GiftCards.list(options);
+            respondOrRedirect({ req, res }, '/giftcards', giftcards, {
+                type: 'success',
+                text: 'Successfully update giftcard!'
+            });
+        } else {
+            console.log('Co loi xay ra.');
+        }
+} catch (err) {
+    console.log('Co loi xay ra');
+    respond(res, 'giftcards/new', {
+        title: 'New giftcard',
+        errors: [err.toString()],
+        giftcard
+    }, 422);
+}
 });
 
 /**
@@ -257,7 +201,7 @@ exports.sell = async(function* (req, res){
  * Buy gift card
  */
 exports.confirmBuy = async(function* (req, res){
-    const giftcard = yield Giftcards.load(req.body.giftId);
+    const giftcard = yield GiftCards.load(req.body.giftId);
     respond(res, 'orders/confirm', {
         title: 'Confirm orders gift card',
         price: req.body.price,

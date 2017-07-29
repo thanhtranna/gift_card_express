@@ -66,9 +66,9 @@ GiftCardsSchema.statics = {
      * Get list Id gift cart by Id user
      * @param id
      */
-    listIdGiftcardByUser: function (options) {
+    listIdGiftcardByUser: function (id) {
         return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
     }
 };
 
-mongoose.model('GiftCards', GiftCardsSchema);
+mongoose.model('Giftcards', GiftCardsSchema);

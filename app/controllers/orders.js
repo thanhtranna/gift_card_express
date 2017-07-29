@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond , respondOrRedirect } = require('../utils');
 const Order = mongoose.model('Order');
-const Giftcards = mongoose.model('Giftcard');
+const Giftcards = mongoose.model('Giftcards');
 
 /**
  * Order
