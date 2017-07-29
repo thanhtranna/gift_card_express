@@ -11,24 +11,33 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
       ul.nav.navbar-nav
         //li(class=isActive('/articles/new') ? 'active' : '')
           //a(href="/articles/new", title="new article") New
-        - if (req.isAuthenticated())
-          li
-            a(href="/admin/categories", title="Category") Category
-          li
-            a(href="/admin/users", title="Manage User ") Users
-          li
-            a(href="/admin/listgift", title="List Gift Card") Gift Card
-          li
-            a(href="/admin/transaction", title="Transaction") Transaction
-          li
-            a(href="/admin/user/profile", title="Profile") Profile
-          li
-            a(href="/logout", title="logout") Logout
-        - else
-          li(class=isActive('/login') ? 'active' : '')
-            a(href="/login", title="Login") Login
-      form.nav.navbar-form.navbar-right.search-form(action='')
-        .form-group.has-feedback
-          //label.sr-only(for='search') Search
-          input#search.form-control(type='text', name='search', placeholder='Search')
-          span.glyphicon.glyphicon-search.form-control-feedback
+        li
+          a(href="/admin/users", title="Users") Users
+        li
+          a(href="/admin/categories", title="Category") Category
+        li
+          a(href="/admin/listgift", title="List Gift Card") List Gift Card
+        li
+          a(href="/admin/transaction", title="Transaction") Transaction
+        li
+          a(href="/admin/giftcards", title="Category") Gift card
+
+      //form.nav.navbar-form.navbar-right.search-form(action='')
+      //  .form-group.has-feedback
+      //    //label.sr-only(for='search') Search
+      //    input#search.form-control(type='text', name='search', placeholder='Search')
+      //    span.glyphicon.glyphicon-search.form-control-feedback
+
+      ul.nav.navbar-nav.navbar-right
+        li
+          a.user-profile.dropdown-toggle(data-toggle='dropdown', aria-expanded='true')
+            img(src='/img/user.jpg', alt='', style='width: 30px; height: 30px; line-height: 32px; border-radius: 50%; margin-right: 10px;')
+            | #{req.user.name} &nbsp;
+            span.fa.fa-angle-down
+          ul.dropdown-menu.dropdown-usermenu.pull-right
+            li
+              a(href='/admin/user/profile')  Profile
+            li
+              a(href='/logout')
+                i.fa.fa-sign-out.pull-right
+                |  Log Out

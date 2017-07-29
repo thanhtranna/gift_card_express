@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const path = require('path');
 const pathName = path.join((process.cwd() + ' ').trim(), '/app/utils');
-const { respond, respondOrRedirect  } = require(pathName);
-const GiftCards = mongoose.model('Giftcards');
+const { respond, respondOrRedirect } = require(pathName);
+const GiftCards = mongoose.model('GiftCards');
+// const Categories = mongoose.model('Categories');
 
 
 /**
  * List gift cards
  */
-exports.index = async(function* (req, res) {
+
+exports.index = async(function*(req, res) {
     const options = {
         // status: { $ne: 2 }
     };
@@ -23,6 +25,7 @@ exports.index = async(function* (req, res) {
 /**
  * Auth gift card
  */
+
 exports.authGift = async(function* (req, res) {
     const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.status = 1;

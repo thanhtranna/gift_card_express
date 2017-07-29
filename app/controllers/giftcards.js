@@ -13,20 +13,24 @@ const Order = mongoose.model('Order');
  */
 
 exports.index = async(function* (req, res) {
-    const options = {
-        status : 1,
-        user : { $ne : req.user }
-    };
-    const giftcards = yield GiftCards.list(options);
+    console.log('Req User: ', req.user);
+    // List giftcards with status = 1.
+    const giftcards = yield GiftCards.list({ status : 1 });
+    // const options = {
+    //     status : 1,
+    //     user : { $ne : req.user }
+    // };
+    // const giftcards = yield GiftCards.list(options);
     respond(res, 'giftcards/index', {
         title: 'List Gift cards',
-        giftcards: giftcards,
+        giftcards: giftcards
     });
 });
 
 /**
  * List gift cards by user
  */
+
 exports.giftcardByUser = async(function* (req, res) {
     const options = {
         user : req.user
@@ -57,7 +61,7 @@ exports.new = async(function*(req, res) {
  */
 
 exports.create = async(function*(req, res) {
-    console.log('Create gift card:=----------------------');
+    console.log('Create gift card:----------------------');
     const giftcard = new GiftCards();
     giftcard.name = req.body.name;
     // console.log('Req body Gift Card: ',req.body);
@@ -70,6 +74,7 @@ exports.create = async(function*(req, res) {
     giftcard.expiresAt = req.body.expiresAt;
     console.log('Gift Card: ', giftcard);
     console.log('File upload: ',req.file);
+    console.log('Path upload file: ', path.join((process.cwd() + ' ').trim(), '/uploads'));
 
     try {
         if (giftcard.saveGiftcard()) {
@@ -92,11 +97,12 @@ exports.create = async(function*(req, res) {
 /**
  * Show detail gift card
  */
+
 exports.show = async(function* (req, res) {
     const giftcard = yield GiftCards.load(req.param('giftId'));
     const options = {
         giftcard: giftcard._id
-    }
+    };
     const giftcardOrders = yield Order.list(options);
     respond(res, 'giftcards/show', {
         title: 'Show gift card detail',
@@ -110,7 +116,7 @@ exports.show = async(function* (req, res) {
  */
 
 exports.edit = async(function*(req, res) {
-    console.log('Edit gift card:=----------------------');
+    console.log('Edit gift card:----------------------');
     const giftcard = yield GiftCards.load(req.param('giftId'));
     const options = {
         parent: null
@@ -128,7 +134,7 @@ exports.edit = async(function*(req, res) {
  */
 
 exports.update = async(function*(req, res) {
-    console.log('Update gift card:=---------------');
+    console.log('Update gift card:---------------');
     const giftcard = yield GiftCards.load(req.param('giftId'));
     giftcard.name = req.body.name;
     giftcard.category = req.body.category;
@@ -180,12 +186,13 @@ exports.destroy = async(function*(req, res) {
 
 exports.sell = async(function* (req, res){
     const giftcard = yield GiftCards.load(req.param('giftId'));
-    giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0
+    giftcard.status == 0 ? giftcard.status = 1 : giftcard.status = 0;
 
     try {
         if (giftcard.saveGiftcard()) {
             respondOrRedirect({ req, res }, '/giftcards', giftcard, {
                 type: 'success',
+                text: 'Change status successfully!'
             });
         }
     } catch (err) {

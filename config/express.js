@@ -69,6 +69,7 @@ module.exports = function (app, passport) {
 
   // expose package.json to views
   app.use(function (req, res, next) {
+    res.locals.user = req.user;
     res.locals.pkg = pkg;
     res.locals.env = env;
     next();
