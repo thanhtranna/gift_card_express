@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
  **/
 const TransactionSchema = new Schema({
     order: { type: Schema.ObjectId, ref: 'Order' },
+    giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
     user: { type: Schema.ObjectId, ref: 'User' },
     description: { type: String, default: '', trim: true },
     createdAt: { type: Date, default: Date.now },

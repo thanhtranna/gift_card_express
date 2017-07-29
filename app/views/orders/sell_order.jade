@@ -11,6 +11,7 @@ block content
                     thead
                         th STT
                         th Custommer
+                        th Gift card
                         th Price order
                         th Time
                         th Action
@@ -19,15 +20,20 @@ block content
                             tr
                                 td= i
                                 td= item.user.name
+                                td= item.giftcard.name
                                 td= item.price
                                 td= item.createdAt
                                 td
                                     form(action='/transactions/order', method="post")
                                         input(type="hidden", name="_csrf", value="#{csrf_token}")
                                         input(type="hidden", name="orderId", value="#{item._id}")
-                                        - if (item.bought == 0 && item.giftcard.status == 2)
-                                            button.btn.btn-info(type="submit") Sell
+                                        - if (item.giftcard.status == 2)
+                                            - if (item.bought == 0)
+                                                span Sold
+                                            - else
+                                                span.btn-success Sold
                                         - else
-                                            span.btn-success Sold
+                                            button.btn.btn-info(type="submit") Sell
+
     - else
         h3 No order

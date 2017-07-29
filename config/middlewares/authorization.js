@@ -90,5 +90,13 @@ exports.giftcard = {
             return res.redirect('/giftcards/' + req.param('giftId'));
         }
         next();
+    }),
+    editGiftcard: async (function* (req, res, next) {
+        const giftcard = yield Giftcards.load(req.param('giftId'));
+        if (giftcard.status != 0) {
+            req.flash('info', 'You cannot edit when selling...');
+            return res.redirect('/giftcards/' + req.param('giftId'));
+        }
+        next();
     })
 };
