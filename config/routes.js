@@ -18,8 +18,8 @@ const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
 const giftCardsAdmin = require('../app/controllers/admin/giftcards');
-const transactions = require('../app/controllers/admin/transaction');
-
+// const transactionsAdmin = require('../app/controllers/admin/transaction');
+const transactions = require('../app/controllers/transactions');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -153,6 +153,10 @@ module.exports = function (app, passport) {
     app.get('/orders/list', auth.requiresLogin, orders.index);
     app.get('/orders/sell-order', auth.requiresLogin, orders.sellOrder);
     app.get('/orders/buy-order', auth.requiresLogin, orders.buyOrder);
+
+    // Transaciton routes
+    app.post('/transactions/order', auth.requiresLogin, transactions.transaction);
+    // app.get('/transaction/cart', auth.requiresLogin, transactions.transaction);
 
     // home route
     app.get('/', giftcards.index);
