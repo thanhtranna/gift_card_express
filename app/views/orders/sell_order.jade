@@ -22,6 +22,12 @@ block content
                                 td= item.price
                                 td= item.createdAt
                                 td
-                                    button.btn.btn-info(type="button") Sell
+                                    form(action='/transactions/order', method="post")
+                                        input(type="hidden", name="_csrf", value="#{csrf_token}")
+                                        input(type="hidden", name="orderId", value="#{item._id}")
+                                        - if (item.bought == 0 && item.giftcard.status == 2)
+                                            button.btn.btn-info(type="submit") Sell
+                                        - else
+                                            span.btn-success Sold
     - else
         h3 No order

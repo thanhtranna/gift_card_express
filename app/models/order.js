@@ -13,7 +13,7 @@ const Schema = mongoose.Schema;
  */
 
 const OrderSchema = new Schema({
-    giftcard: { type: Schema.ObjectId, ref: 'Giftcard' },
+    giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
     price: { type: String, default: '0', trim: true },
     user: { type: Schema.ObjectId, ref: 'User' },
     bought: { type: Number, default: 0 },

@@ -33,7 +33,6 @@ const GiftCardsSchema = new Schema({
 
 GiftCardsSchema.methods = {
     saveGiftcard: function () {
-        // code upload image
         return this.save();
     }
 };
@@ -79,9 +78,15 @@ GiftCardsSchema.statics = {
     /* Get list Id gift cart by Id user
      * @param id
      */
-    listIdGiftcardByUser: function (id) {
-        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
+    listIdGiftcardByUser: function (options) {
+        // return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'category', select: 'name' }]).exec();
+        return this.find(options).populate([{ path: 'user', select: 'name username' }, {
+            path: 'category',
+            select: 'name'
+        }])
+            .select({ _id: 1 })
+            .exec();
     }
 };
 
-mongoose.model('Giftcards', GiftCardsSchema);
+mongoose.model('GiftCards', GiftCardsSchema);

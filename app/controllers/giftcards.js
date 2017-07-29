@@ -4,7 +4,7 @@ const { wrap: async } = require('co');
 // const multer = require('multer');
 // const fs = require('fs');
 const { respond, respondOrRedirect } = require('../utils');
-const GiftCards = mongoose.model('Giftcards');
+const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
 const Order = mongoose.model('Order');
 

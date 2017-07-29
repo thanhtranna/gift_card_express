@@ -42,10 +42,11 @@ exports.index = async(function* (req, res) {
 
 exports.sellOrder = async(function* (req, res) {
     const options = {
-        user: req.user
+        user: req.user._id
     };
     const giftcards = yield Giftcards.listIdGiftcardByUser(options);
     const sellOrders = yield Order.listByUser('giftcard', giftcards);
+    console.log(sellOrders);
     respond(res, 'orders/sell_order', {
         title: 'List Sell Orders',
         sellOrders: sellOrders,
