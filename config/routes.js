@@ -17,6 +17,7 @@ const articles = require('../app/controllers/articles');
 const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
+const index = require('../app/controllers/index');
 const giftCardsAdmin = require('../app/controllers/admin/giftcards');
 // const transactionsAdmin = require('../app/controllers/admin/transaction');
 const transactions = require('../app/controllers/transactions');
@@ -90,7 +91,9 @@ module.exports = function (app, passport) {
             failureRedirect: '/login',
             failureFlash: 'Invalid email or password.'
         }), users.session);
+    // Show information user.
     app.get('/users/:userId', users.show);
+    app.put('/users/:userId', users.updateUser);
     app.get('/auth/facebook',
         pauth('facebook', {
             scope: ['email', 'user_about_me'],
@@ -144,9 +147,11 @@ module.exports = function (app, passport) {
 
     // order routes
     app.post('/orders/order', auth.requiresLogin, orders.order);
+    app.post('/orders/buy-order', auth.requiresLogin, orders.buyOrder);
     app.get('/orders/list', auth.requiresLogin, orders.index);
     app.get('/orders/sell-order', auth.requiresLogin, orders.sellOrder);
     app.get('/orders/buy-order', auth.requiresLogin, orders.buyOrder);
+    app.post('/orders/clear-order', auth.requiresLogin, orders.clearOrder);
 
     // Transaciton routes
     app.post('/transactions/order', auth.requiresLogin, transactions.transaction);
@@ -154,6 +159,8 @@ module.exports = function (app, passport) {
 
     // home route
     app.get('/', giftcards.index);
+    // This will handle 404 requests.
+    app.get('*', index.badRequest);
 
     // comment routes
     app.param('commentId', comments.load);

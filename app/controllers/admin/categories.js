@@ -91,6 +91,7 @@ exports.edit = async(function*(req, res) {
  */
 
 exports.update = async(function*(req, res) {
+    console.log('Update category.');
     const category = yield Categories.load(req.param('catId'));
     category.name = req.body.name;
     category.description = req.body.description;

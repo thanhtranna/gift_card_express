@@ -20,45 +20,21 @@ const oAuthTypes = [
  * User Schema
  */
 
-const UserSchema = new Schema({
+const UsersSchema = new Schema({
     name: { type: String, default: '' },
     email: { type: String, default: '' },
     provider: { type: String, default: '' },
     hashed_password: { type: String, default: '' },
     salt: { type: String, default: '' },
-    admin: {
-        type: Boolean,
-        default: false
-    },
-    block: {
-        type: Number,
-        default: 0
-    },
+    admin: { type: Boolean,default: false },
+    block: { type: Number,default: 0 },
     resetPasswordToken: { type: String, default: '' },
     resetPasswordExpires: Date,
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
+    created_at: { type: Date,default: Date.now },
     updated_at: Date,
-    giftcard: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'GiftCard'
-        }
-    ],
-    transaction: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Transaction'
-        }
-    ],
-    order: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Order'
-        }
-    ],
+    giftcard: { type: Schema.Types.ObjectId,ref: 'GiftCards' },
+    transaction: { type: Schema.Types.ObjectId,ref: 'Transactions' },
+    order: { type: Schema.Types.ObjectId, ref: 'Orders' },
     facebook: {},
     twitter: {},
     github: {},
@@ -72,7 +48,7 @@ const validatePresenceOf = value => value && value.length;
  * Virtuals
  */
 
-UserSchema
+UsersSchema
     .virtual('password')
     .set(function (password) {
         this._password = password;
@@ -89,18 +65,18 @@ UserSchema
 
 // the below 5 validations only apply if you are signing up traditionally
 
-UserSchema.path('name').validate(function (name) {
+UsersSchema.path('name').validate(function (name) {
     if (this.skipValidation()) return true;
     return name.length;
 }, 'Name cannot be blank');
 
-UserSchema.path('email').validate(function (email) {
+UsersSchema.path('email').validate(function (email) {
     if (this.skipValidation()) return true;
     return email.length;
 }, 'Email cannot be blank');
 
-UserSchema.path('email').validate(function (email, fn) {
-    const User = mongoose.model('User');
+UsersSchema.path('email').validate(function (email, fn) {
+    const User = mongoose.model('Users');
     if (this.skipValidation()) fn(true);
 
     // Check only when it is a new user or when email field is modified
@@ -121,7 +97,7 @@ UserSchema.path('email').validate(function (email, fn) {
  * Pre-save hook
  */
 
-UserSchema.pre('save', function (next) {
+UsersSchema.pre('save', function (next) {
     if (!this.isNew) return next();
 
     if (!validatePresenceOf(this.password) && !this.skipValidation()) {
@@ -135,7 +111,7 @@ UserSchema.pre('save', function (next) {
  * Methods
  */
 
-UserSchema.methods = {
+UsersSchema.methods = {
 
     /**
      * Authenticate - check if the passwords are the same
@@ -186,6 +162,14 @@ UserSchema.methods = {
 
     skipValidation: function () {
         return ~oAuthTypes.indexOf(this.provider);
+    },
+
+    /**
+     * Save user.
+     */
+
+    saveUser: function () {
+        return this.save();
     }
 };
 
@@ -193,10 +177,19 @@ UserSchema.methods = {
  * Statics
  */
 
-UserSchema.statics = {
+UsersSchema.statics = {
 
     /**
-     * Load
+     * Load user by id.
+     * @param options
+     */
+
+    loadUserById: function (options) {
+        return this.findOne(options).exec();
+    },
+
+    /**
+     * Load  information user.
      *
      * @param {Object} options
      * @param {Function} cb
@@ -211,4 +204,4 @@ UserSchema.statics = {
     }
 };
 
-mongoose.model('User', UserSchema);
+mongoose.model('Users', UsersSchema);

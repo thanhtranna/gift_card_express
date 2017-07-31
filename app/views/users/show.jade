@@ -1,5 +1,70 @@
+//Created by tranthanhit on 31/07/2017.
+
 extends ../layouts/default
 
 block main
-  - var name = user.name ? user.name : user.username
-  h1= name
+  h3= title
+
+block content
+  - var action = '/users'
+  - action += user.isNew ? '' : '/' + user._id
+      - console.log(action)
+  form#updateform.form-horizontal.form-label-left(method='POST', action=action, role="form")
+    input(type="hidden", name="_csrf", value="#{csrf_token}")
+    - if (!user.isNew)
+      input(type="hidden", name="_method", value="PUT")
+    .form-group
+      .col-md-6.col-sm-6.col-xs-12
+        input#id.form-control.col-md-7.col-xs-12(name='idUser', type='hidden', value=user._id)
+    .form-group
+      label.control-label.col-md-3.col-sm-3.col-xs-12
+        | Email
+        span.required *
+      .col-md-6.col-sm-6.col-xs-12
+        input#email.form-control.col-md-7.col-xs-12(name='email', type='text', value=user.email, data-error='#errorEmail' disabled)
+        small#errorEmail(style='color: red;')
+    .form-group
+      label.control-label.col-md-3.col-sm-3.col-xs-12
+        | Full Name
+        span.required *
+      .col-md-6.col-sm-6.col-xs-12
+        input#fullName.form-control.col-md-7.col-xs-12(name='name', type='text', value=user.name, data-error='#errorName')
+        small#errorName(style='color: red;')
+    .form-group
+      label.control-label.col-md-3.col-sm-3.col-xs-12 Admin
+      .col-md-6.col-sm-6.col-xs-12
+        label.radio-inline
+          input(type='radio', name='admin', value='1', if user.admin = 'true' checked='checked', disabled)
+          | Yes
+        label.radio-inline
+          input(type='radio', name='admin', value='0', if user.admin = 'false' checked='checked', disabled)
+          | No
+    .form-group
+      .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.text-center
+        input.btn.btn-success(type='submit', value='Update', style='margin-right: 4px;')
+        a.btn.btn-danger(href='/', type='button') Cancel
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js')
+  script(type='text/javascript').
+      $("#updateform").validate({
+          rules: {
+              name: {
+                  required: true
+              }
+          },
+          messages: {
+              name: {
+                  required: "Please name field not required!"
+              }
+          },
+          errorElement: "span",
+          errorPlacement: function (error, element) {
+              var placement = $(element).data("error");
+              if (placement) {
+                  $(placement).append(error)
+              } else {
+                  error.insertAfter(element);
+              }
+          }
+      });
+
+

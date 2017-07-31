@@ -12,10 +12,10 @@ const Schema = mongoose.Schema;
  * Order Schema
  */
 
-const OrderSchema = new Schema({
+const OrdersSchema = new Schema({
     giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
     price: { type: String, default: '0', trim: true },
-    user: { type: Schema.ObjectId, ref: 'User' },
+    user: { type: Schema.ObjectId, ref: 'Users' },
     bought: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now }
@@ -26,11 +26,10 @@ const OrderSchema = new Schema({
  * Method
  * @type {}
  */
-OrderSchema.methods = {
+OrdersSchema.methods = {
 
     /**
      * Save order
-     *
      * @param {Object} images
      * @api private
      */
@@ -41,25 +40,46 @@ OrderSchema.methods = {
 };
 
 
-OrderSchema.statics = {
+OrdersSchema.statics = {
 
     /**
-     * List categories
+     * List orders
      */
 
     list: function (options) {
-        return this.find(options).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image status' }]).exec();
+        return this.find(options).populate([{ path: 'user', select: '_id name username' }, {
+            path: 'giftcard',
+            select: '_id name description image status'
+        }]).exec();
     },
 
     /**
-     * Load category by id
+     * Clear Order.
+     * @param options
+     * @returns {Promise}
+     */
+    clearOrder: function (options) {
+        return this.find(options).remove().exec();
+    },
+
+    /**
+     * Load order by id
      * @param id
      * @returns {Promise}
      */
-    load: function (id){
-        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, { path: 'giftcard', select: '_id name description image status' }]).exec();
+    load: function (id) {
+        return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' }, {
+            path: 'giftcard',
+            select: '_id name description image status'
+        }]).exec();
     },
 
+    /**
+     * list by user where condition.
+     * @param condition
+     * @param arrIn
+     * @returns {*}
+     */
     listByUser: function (condition, arrIn) {
         return this.find()
             .populate([
@@ -71,4 +91,4 @@ OrderSchema.statics = {
 };
 
 
-mongoose.model('Order', OrderSchema);
+mongoose.model('Orders', OrdersSchema);

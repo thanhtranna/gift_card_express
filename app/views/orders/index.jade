@@ -1,7 +1,7 @@
 extends ../layouts/default
 
 block main
-    h1= title
+    h3= title
 
 block content
     - if (orders.length)
@@ -11,10 +11,10 @@ block content
             h4 Price buy:  #{item.price}
             h4 Picture: No image ^^!
             - if (item.bought == 0)
-                h4 Status: Waiting...
+                h4 Status: Waiting authentication...
             - else
                 h4 Status: Bought!
     - else
         - if(req.isAuthenticated())
             h4.muted No order!.&nbsp;
-                a(href="/") Buy now
+                a.btn.btn-success(href="/") Buy now

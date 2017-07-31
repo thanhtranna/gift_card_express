@@ -6,7 +6,7 @@ const { wrap: async } = require('co');
 const { respond, respondOrRedirect } = require('../utils');
 const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
-const Order = mongoose.model('Order');
+const Order = mongoose.model('Orders');
 
 /**
  * List all gift cards
@@ -16,6 +16,7 @@ exports.index = async(function* (req, res) {
     console.log('Req User: ', req.user);
     // List giftcards with status = 1 and without giftcard of current user.
     const giftcards = yield GiftCards.list({ status : 1, user: { $ne: req.user } });
+    console.log(giftcards);
     // const options = {
     //     status : 1,
     //     user : { $ne : req.user }
@@ -49,6 +50,7 @@ exports.giftcardByUser = async(function* (req, res) {
 exports.new = async(function*(req, res) {
     const options = {};
     const categories = yield Categories.list(options);
+    console.log('Categories: ', categories);
     respond(res, 'giftcards/new', {
         title: 'Create Gift card',
         categories: categories,
@@ -103,7 +105,9 @@ exports.show = async(function* (req, res) {
     const options = {
         giftcard: giftcard._id
     };
+
     const giftcardOrders = yield Order.list(options);
+    console.log(giftcardOrders);
     respond(res, 'giftcards/show', {
         title: 'Show gift card detail',
         giftcard: giftcard,
@@ -119,9 +123,10 @@ exports.edit = async(function*(req, res) {
     console.log('Edit gift card:----------------------');
     const giftcard = yield GiftCards.load(req.param('giftId'));
     const options = {
-        parent: null
+        // parent: null
     };
     const categories = yield Categories.list(options);
+    console.log('Category: ', categories);
     respond(res, 'giftcards/edit', {
         title: 'Edit ' + giftcard.name,
         giftcard: giftcard,

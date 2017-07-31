@@ -10,7 +10,7 @@ const asynct = require('async');
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond, respondOrRedirect } = require('../utils');
-const User = mongoose.model('User');
+const User = mongoose.model('Users');
 
 /**
  * Load
@@ -42,8 +42,8 @@ exports.create = async(function*(req, res) {
             // Response and redirect homepage.
             console.log('Dang Nhap thanh cong.');
             return respondOrRedirect({ req, res }, '/', {}, {
-                type: 'info',
-                text: 'Sorry! We are not able to log you in!'
+                type: 'success',
+                text: 'Awesome! Login successfully!'
             });
         });
     } catch (err) {
@@ -62,14 +62,36 @@ exports.create = async(function*(req, res) {
  *  Show profile
  */
 
-exports.show = function (req, res) {
-    const user = req.profile;
-    console.log(user);
+exports.show = async(function* (req, res) {
+    const options = {
+        _id: req.profile._id
+    };
+    const user = yield User.loadUserById(options);
     respond(res, 'users/show', {
-        title: user.name,
+        title: 'Information user.',
         user: user
     });
-};
+});
+
+/**
+ *  Update information user.
+ */
+
+exports.updateUser = async(function* (req, res) {
+    // Options when update information user.
+    const options = {
+        _id: req.param('userId')
+    };
+    const user = yield User.loadUserById(options);
+    user.name = req.body.name;
+    if (user.saveUser()) {
+        console.log();
+        return respondOrRedirect({ req, res }, '/', {}, {
+            type: 'success',
+            text: 'Update information user successfully.'
+        });
+    }
+});
 
 exports.signin = function () {
 };

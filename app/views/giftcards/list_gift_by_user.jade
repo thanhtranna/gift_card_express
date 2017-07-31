@@ -1,12 +1,12 @@
 extends ../layouts/default
 
 block main
-    h1= title
+    h3= title
 
 block content
     - if (req.isAuthenticated())
         h3
-            a(href="/giftcards/new") Create new gift card
+            a.btn.btn-success(href="/giftcards/new") Create new gift card
 
     - if (giftcards.length)
         - each item in giftcards

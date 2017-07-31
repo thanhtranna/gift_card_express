@@ -16,7 +16,7 @@ const GiftCardsSchema = new Schema({
     category: { type: Schema.ObjectId, ref: 'Categories' },
     image: { type: String, default: '', trim: true },
     description: { type: String, default: '', trim: true },
-    user: { type: Schema.ObjectId, ref: 'User' },
+    user: { type: Schema.ObjectId, ref: 'Users' },
     maxPrice: { type: Number, default: 0, min: 0 },
     minPrice: { type: Number, default: 0, min: 0 },
     expiresAt: { type: Date, default: Date.now },

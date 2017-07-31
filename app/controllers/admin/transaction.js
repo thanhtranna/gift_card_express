@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 // const { respond , respondOrRedirect } = require('../../utils');
-const Transaction = mongoose.model('Transaction');
+const Transaction = mongoose.model('Transactions');
 
 /**
  * List Transaction

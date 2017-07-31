@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond , respondOrRedirect } = require('../utils');
-const Transactions = mongoose.model('Transaction');
-const Order = mongoose.model('Order');
+const Transactions = mongoose.model('Transactions');
+const Order = mongoose.model('Orders');
 
 /**
  * Transaction

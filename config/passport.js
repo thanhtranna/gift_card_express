@@ -5,7 +5,7 @@
  */
 
 const mongoose = require('mongoose');
-const User = mongoose.model('User');
+const User = mongoose.model('Users');
 
 const local = require('./passport/local');
 const google = require('./passport/google');

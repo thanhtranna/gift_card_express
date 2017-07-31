@@ -1,39 +1,73 @@
 extends ../layouts/default
 
 block main
-    h1= title
+    h3= title
 
 block content
-    - if ( sellOrders.length )
-        h3 List order
-            div
-                table.table.table-striped
-                    thead
+    .container
+    - if ( sellOrders && sellOrders.length )
+        .row
+            table.table.table-hover
+                thead
+                    tr
                         th STT
                         th Custommer
                         th Gift card
                         th Price order
                         th Time
                         th Action
-                    tbody
-                        -each item, i in sellOrders
-                            tr
-                                td= i
-                                td= item.user.name
-                                td= item.giftcard.name
-                                td= item.price
-                                td= item.createdAt
-                                td
-                                    form(action='/transactions/order', method="post")
-                                        input(type="hidden", name="_csrf", value="#{csrf_token}")
-                                        input(type="hidden", name="orderId", value="#{item._id}")
-                                        - if (item.giftcard.status == 2)
-                                            - if (item.bought == 0)
-                                                span Sold
-                                            - else
-                                                span.btn-success Sold
+                tbody
+                    -each item, i in sellOrders
+                        tr
+                            td= i
+                            td= item.user.name
+                            td= item.giftcard.name
+                            td= item.price
+                            td= item.createdAt
+                            td
+                                form(action='/orders/buy-order', method="post")
+                                    input(type="hidden", name="_csrf", value="#{csrf_token}")
+                                    input(type="hidden", name="orderId", value="#{item._id}")
+                                    - if (item.giftcard.status == 2)
+                                        - if (item.bought == 0)
+                                            span Sold
                                         - else
-                                            button.btn.btn-info(type="submit") Sell
+                                            span.btn-success Sold
+                                    - else
+                                        button.btn.btn-info(type="submit") Sell
 
-    - else
-        h3 No order
+    - else if (buyOrders && buyOrders.length)
+        - console.log('Buy Order From Client: ', buyOrders)
+        .row
+            table.table.table-hover
+                thead
+                    tr
+                        th STT
+                        th Custommer
+                        th Gift card
+                        th Price order
+                        th Time
+                        th Action
+                tbody
+                -each item, i in buyOrders
+                    tr
+                        td= i
+                        td= item.user.name
+                        td= item.giftcard.name
+                        td= item.price
+                        td= item.createdAt
+                        td
+                            form(action='/orders/clear-order', method="post", onsubmit="return confirm('Are you cancel order?')")
+                                input(type="hidden", name="_csrf", value="#{csrf_token}")
+                                input(type="hidden", name="orderId", value="#{item._id}")
+                                - if (item.giftcard.status == 2)
+                                    small Da Ban
+                                    - if (item.bought == 0)
+                                        span Sold
+                                    - else
+                                        span.btn-success Sold
+                                - else if (item.giftcard.status == 1)
+                                        button.btn.btn-info(type="submit") Waiting...
+    -else
+        .text-center
+            h4 No order
