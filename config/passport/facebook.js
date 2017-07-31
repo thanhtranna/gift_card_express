@@ -7,7 +7,7 @@
 const mongoose = require('mongoose');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const config = require('../');
-const User = mongoose.model('User');
+const User = mongoose.model('Users');
 
 /**
  * Expose

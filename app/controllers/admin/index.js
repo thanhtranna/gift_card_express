@@ -5,7 +5,7 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond , respondOrRedirect } = require('../../utils');
-const User = mongoose.model('User');
+const User = mongoose.model('Users');
 const GiftCard = mongoose.model('GiftCards');
 
 

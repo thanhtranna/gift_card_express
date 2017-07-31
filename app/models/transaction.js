@@ -9,10 +9,10 @@ const Schema = mongoose.Schema;
  Schema
  **/
 
-const TransactionSchema = new Schema({
-    order: { type: Schema.ObjectId, ref: 'Order' },
+const TransactionsSchema = new Schema({
+    order: { type: Schema.ObjectId, ref: 'Orders' },
     giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
-    user: { type: Schema.ObjectId, ref: 'User' },
+    user: { type: Schema.ObjectId, ref: 'Users' },
     description: { type: String, default: '', trim: true },
     createdAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now }
@@ -23,7 +23,7 @@ const TransactionSchema = new Schema({
  * @type {{}}
  */
 
-TransactionSchema.methods = {
+TransactionsSchema.methods = {
     /**
      * Save transaction.
      */
@@ -37,7 +37,7 @@ TransactionSchema.methods = {
  * Statics
  */
 
-TransactionSchema.statics = {
+TransactionsSchema.statics = {
 
     /**
      * Get list transaction
@@ -52,4 +52,4 @@ TransactionSchema.statics = {
     }
 };
 
-module.exports = mongoose.model('Transaction', TransactionSchema);
+module.exports = mongoose.model('Transactions', TransactionsSchema);

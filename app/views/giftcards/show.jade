@@ -27,7 +27,7 @@ block content
                     // onsubmit="return confirm('Do you want to buy this gift card?')"
                     input(type='hidden', name='_csrf', value='#{ csrf_token }')
                     input(type='hidden', name='giftId', value="#{ giftcard._id }")
-                    input(type='text', name='price', value="", placeholder='Enter price you want buy!' )
+                    input.form(type='text', name='price', value="", placeholder='Enter price you want buy!' )
                     button.btn.btn-info(type="submit") ORDER
         - else
             form(action="/giftcards/" + giftcard._id, method="post", onsubmit="return confirm('Are you sure?')")
@@ -36,36 +36,36 @@ block content
                     a.btn.btn-default(href='/giftcards/' + giftcard._id + '/edit', title="edit") Edit
                 input(type="hidden", name="_method", value="DELETE")
                 button.btn.btn-danger(type="submit") Delete
-            - if ( giftcardOrders.length )
                 h3 List order
-                    div
-                        table.table.table-striped
-                            thead
-                                th STT
+            - if ( giftcardOrders.length )
+                table.table.table-hover
+                    thead
+                        tr
+                            th STT
                                 th Custommer
                                 th Price order
                                 th Time
                                 th Action
-                            tbody
-                                -each item, i in giftcardOrders
-                                    tr
-                                        td= i
-                                        td= item.user.name
-                                        td= item.price
-                                        td= item.createdAt
-                                        td
-                                            form(action='/transactions/order', method="post")
-                                                input(type="hidden", name="_csrf", value="#{csrf_token}")
-                                                input(type="hidden", name="orderId", value="#{item._id}")
-                                                - if (item.giftcard.status == 2)
-                                                    - if (item.bought == 0)
-                                                        span Sold
-                                                    - else
-                                                        span.btn-success Sold
+                        tbody
+                            -each item, i in giftcardOrders
+                                tr
+                                    td= i
+                                    td= item.user.name
+                                    td= item.price
+                                    td= item.createdAt
+                                    td
+                                        form(action='/transactions/order', method="post")
+                                            input(type="hidden", name="_csrf", value="#{csrf_token}")
+                                            input(type="hidden", name="orderId", value="#{item._id}")
+                                            - if (item.giftcard.status == 2)
+                                                - if (item.bought == 0)
+                                                    span Sold
                                                 - else
-                                                    button.btn.btn-info(type="submit") Sell
+                                                    span.btn-success Sold
+                                            - else
+                                                button.btn.btn-info(type="submit") Sell
             - else
-                h3 No order
+                h4 No User order
     - else
         h4
-            a(href="/login") Login and Buy now
+            a.btn.btn-primary(href="/login") Login and Buy now

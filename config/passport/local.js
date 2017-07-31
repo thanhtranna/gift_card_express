@@ -6,7 +6,7 @@
 
 const mongoose = require('mongoose');
 const LocalStrategy = require('passport-local').Strategy;
-const User = mongoose.model('User');
+const User = mongoose.model('Users');
 
 /**
  * Expose
