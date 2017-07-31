@@ -1,6 +1,6 @@
 giftcard.giftcard
     h4
-        a(href="/giftcards/#{item._id}")  #{item.name}
+        a(href="/admin/giftcards/#{item._id}")  #{item.name}
     h5= item.description
     - if (item.user)
         span Poster: &nbsp;
