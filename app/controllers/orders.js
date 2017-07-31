@@ -47,6 +47,7 @@ exports.sellOrder = async(function* (req, res) {
     const giftcards = yield Giftcards.listIdGiftcardByUser(options);
     console.log('Get list id by user: ', giftcards);
     const sellOrders = yield Order.listByUser('giftcard', giftcards);
+    console.log(sellOrders);
     respond(res, 'orders/sell_order', {
         title: 'List Sell Orders',
         sellOrders: sellOrders,

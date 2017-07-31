@@ -18,8 +18,8 @@ const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
 const giftCardsAdmin = require('../app/controllers/admin/giftcards');
-const transactions = require('../app/controllers/admin/transaction');
-
+// const transactionsAdmin = require('../app/controllers/admin/transaction');
+const transactions = require('../app/controllers/transactions');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
@@ -32,6 +32,7 @@ const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 const adminAuth = [auth.requiresLogin, auth.admin.hasAuthorization];
 const giftCardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization];
+const editGiftCardAuth = [auth.requiresLogin, auth.giftcard.hasAuthorization, auth.giftcard.editGiftcard];
 
 const fail = {
     failureRedirect: '/login'
@@ -135,7 +136,7 @@ module.exports = function (app, passport) {
     app.get('/giftcards/new', auth.requiresLogin, giftcards.new);
     app.post('/giftcards', auth.requiresLogin, giftcards.create);
     app.get('/giftcards/:giftId', giftcards.show);
-    app.get('/giftcards/:giftId/edit', giftCardAuth, giftcards.edit);
+    app.get('/giftcards/:giftId/edit', editGiftCardAuth, giftcards.edit);
     app.put('/giftcards/:giftId', giftCardAuth, giftcards.update);
     app.delete('/giftcards/:giftId', giftCardAuth, giftcards.destroy);
     app.post('/giftcards/sell', giftCardAuth, giftcards.sell);
@@ -146,6 +147,10 @@ module.exports = function (app, passport) {
     app.get('/orders/list', auth.requiresLogin, orders.index);
     app.get('/orders/sell-order', auth.requiresLogin, orders.sellOrder);
     app.get('/orders/buy-order', auth.requiresLogin, orders.buyOrder);
+
+    // Transaciton routes
+    app.post('/transactions/order', auth.requiresLogin, transactions.transaction);
+    // app.get('/transaction/cart', auth.requiresLogin, transactions.transaction);
 
     // home route
     app.get('/', giftcards.index);

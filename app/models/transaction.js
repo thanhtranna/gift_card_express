@@ -4,42 +4,19 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 /**
  Schema
-**/
-const TransactionSchema = new mongoose.Schema({
-    order: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Order'
-        }
-    ],
-    user: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
-    giftcard: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'GiftCards'
-        }
-    ],
-    descriptions: {
-        type: String,
-        required: true
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date
-    }
-}, { collection: 'Transaction' } );
+ **/
 
-
+const TransactionSchema = new Schema({
+    order: { type: Schema.ObjectId, ref: 'Order' },
+    giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
+    user: { type: Schema.ObjectId, ref: 'User' },
+    description: { type: String, default: '', trim: true },
+    createdAt: { type: Date, default: Date.now },
+    updateAt: { type: Date, default: Date.now }
+});
 
 /**
  * Method
@@ -47,6 +24,10 @@ const TransactionSchema = new mongoose.Schema({
  */
 
 TransactionSchema.methods = {
+    /**
+     * Save transaction.
+     */
+
     saveTransactions: function () {
         return this.save();
     },
@@ -57,27 +38,18 @@ TransactionSchema.methods = {
  */
 
 TransactionSchema.statics = {
+
     /**
      * Get list transaction
      * @param options
      * @returns {Promise|Array|{index: number, input: string}|*}
      */
+
     list: function (options) {
         return this.find(options).populate([{ path: 'user', select: 'name' },
-                                            { path: 'order', select: 'user price' },
-                                            { path: 'giftcard', select: 'name category' }]).exec();
+            { path: 'order', select: 'user price' },
+            { path: 'giftcard', select: 'name category' }]).exec();
     }
-
-    // /**
-    //  * Get gift card by Id
-    //  * @param id
-    //  * @returns {Promise}
-    //  */
-    // load: function (id){
-    //     return this.findOne({ _id: id }).populate([{ path: 'user', select: 'name username' },
-//                                                    { path: 'category', select: 'name' }])
-    //     .exec();
-    // }
 };
 
 module.exports = mongoose.model('Transaction', TransactionSchema);
