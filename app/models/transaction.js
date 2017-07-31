@@ -4,9 +4,11 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 /**
  Schema
  **/
+
 const TransactionSchema = new Schema({
     order: { type: Schema.ObjectId, ref: 'Order' },
     giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
@@ -22,6 +24,10 @@ const TransactionSchema = new Schema({
  */
 
 TransactionSchema.methods = {
+    /**
+     * Save transaction.
+     */
+
     saveTransactions: function () {
         return this.save();
     },
@@ -32,17 +38,18 @@ TransactionSchema.methods = {
  */
 
 TransactionSchema.statics = {
+
     /**
      * Get list transaction
      * @param options
      * @returns {Promise|Array|{index: number, input: string}|*}
      */
+
     list: function (options) {
         return this.find(options).populate([{ path: 'user', select: 'name' },
             { path: 'order', select: 'user price' },
             { path: 'giftcard', select: 'name category' }]).exec();
-    },
-
+    }
 };
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

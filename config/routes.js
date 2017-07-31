@@ -43,16 +43,8 @@ const fail = {
  */
 
 module.exports = function (app, passport) {
-
-
+    
     const pauth = passport.authenticate.bind(passport);
-
-    // admin routes.
-    // app.get('/admin', adminUser.index);
-    // app.get('/admin/users', adminUser.users);
-    // app.get('/admin/user/edit/:userId', adminUser.editUserById);
-    // app.post('/admin/user/edit/:userId', adminUser.updateUserById);
-    // app.post('/admin/user/delete', adminUser.deleteUserById);
 
     // admin routes
 
@@ -75,6 +67,11 @@ module.exports = function (app, passport) {
     app.get('/admin/categories/:catId/edit', adminAuth, categories.edit);
     app.put('/admin/categories/:catId', adminAuth, categories.update);
     app.delete('/admin/categories/:catId', adminAuth, categories.destroy);
+
+    // Router authenticate gift card.
+    app.get('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
+    app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
+    app.put('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
 
     // router shopping cart.
     app.get('/add-to-cart/:idCart', auth.requiresLogin);
@@ -144,10 +141,6 @@ module.exports = function (app, passport) {
     app.delete('/giftcards/:giftId', giftCardAuth, giftcards.destroy);
     app.post('/giftcards/sell', giftCardAuth, giftcards.sell);
     app.post('/giftcards/confirm-buy', auth.requiresLogin, giftcards.confirmBuy);
-
-    // gift card admin routes
-    app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
-    app.put('/admin/giftcards/:giftId/auth_gift', giftCardsAdmin.authGift);
 
     // order routes
     app.post('/orders/order', auth.requiresLogin, orders.order);

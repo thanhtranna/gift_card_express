@@ -54,7 +54,7 @@ CategoriesSchema.methods = {
 CategoriesSchema.statics = {
 
     /**
-     * List categories
+     * List categories bu options.
      */
 
     list: function (options) {
@@ -66,8 +66,18 @@ CategoriesSchema.statics = {
      * @param id
      * @returns {Promise}
      */
+
     load: function (id){
         return this.findOne({ _id: id }).exec();
+    },
+
+    /**
+     * Remove category by id.
+     * @param id
+     */
+
+    remove: function (id) {
+        return this.find({ _id: id }).remove().exec();
     }
 };
 

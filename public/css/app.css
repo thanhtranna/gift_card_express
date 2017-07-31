@@ -152,3 +152,16 @@ button.error:focus {
   left: initial;
   font-size: 14px;
 }
+
+/*Shopping cart*/
+
+.badge-notify{
+  background:red;
+  position:relative;
+  right: 10px;
+}
+
+.my-cart-icon-affix {
+  position: fixed;
+  z-index: 999;
+}

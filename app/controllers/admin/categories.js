@@ -7,6 +7,7 @@ const Categories = mongoose.model('Categories');
 exports.index = async(function*(req, res) {
     const options = {};
     const categories = yield Categories.list(options);
+    console.log(categories);
     respond(res, 'admin/categories/index', {
         title: 'List Categories',
         categories: categories,
@@ -42,7 +43,7 @@ exports.create = async(function*(req, res) {
         if (category.saveCat()) {
             const options = {};
             const categories = yield Categories.list(options);
-            respondOrRedirect({ req, res }, '/categories', categories, {
+            respondOrRedirect({ req, res }, '/admin/categories', categories, {
                 type: 'success',
                 text: 'Successfully created categories!'
             });
@@ -104,7 +105,7 @@ exports.update = async(function*(req, res) {
             });
         }
     } catch (err) {
-        respond(res, 'category/#{category._id}/edit', {
+        respond(res, 'admin/categories/show', {
             title: 'Edit category',
             errors: [err.toString()],
             category
@@ -119,7 +120,7 @@ exports.update = async(function*(req, res) {
 exports.destroy = async(function*(req, res) {
     const category = yield Categories.load(req.param('catId'));
     category.remove();
-    respondOrRedirect({ req, res }, '/categories', {}, {
+    respondOrRedirect({ req, res }, '/admin/categories', {}, {
         type: 'info',
         text: 'Deleted successfully'
     });
