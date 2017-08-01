@@ -30,6 +30,7 @@ module.exports = new GoogleStrategy({
           email: profile.emails[0].value,
           username: profile.username,
           provider: 'google',
+          admin: false,
           google: profile._json
         });
         user.save(function (err) {

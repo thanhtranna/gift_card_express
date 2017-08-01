@@ -19,7 +19,7 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
             ul.nav.navbar-nav.navbar-right
                 li
                     //a(href='/shopping-cart/')
-                    span.badge.badge-notify.my-cart-badge.pull-right
+                    span.badge.badge-notify.my-cart-badge.pull-right=cart? cart.totalQty : 0
                     i.fa.fa-shopping-cart.my-cart-icon.fa-2x(style='margin-right: 5px; float: right; cursor: pointer; padding-top: 13px;')
                 li(style='cursor: pointer;')
                     a.user-profile.dropdown-toggle(data-toggle='dropdown', aria-expanded='true')
@@ -44,57 +44,3 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
             //    //label.sr-only(for='search') Search
             //    input#search.form-control(type='text', name='search', placeholder='Search')
             //    span.glyphicon.glyphicon-search.form-control-feedback
-        script(type='text/javascript', src='js/jquery.mycart.min.js')
-        script(type='text/javascript').
-            $(function () {
-                var goToCartIcon = function ($addTocartBtn) {
-                    var $cartIcon = $(".my-cart-icon");
-                        var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>').css({
-                        "position": "fixed",
-                        "z-index": "999"
-                        });
-                    $addTocartBtn.prepend($image);
-                    var position = $cartIcon.position();
-                    $image.animate({
-                        top: position.top,
-                        left: position.left
-                    }, 500, "linear", function () {
-                        $image.remove();
-                    });
-                }
-                $('.my-cart-btn').myCart({
-                    currencySymbol: '$',
-                    classCartIcon: 'my-cart-icon',
-                    classCartBadge: 'my-cart-badge',
-                    classProductQuantity: 'my-product-quantity',
-                    classProductRemove: 'my-product-remove',
-                    classCheckoutCart: 'my-cart-checkout',
-                    affixCartIcon: true,
-                    showCheckoutModal: true,
-                    numberOfDecimals: 2,
-                    cartItems: [
-                    ],
-                    clickOnAddToCart: function ($addTocart) {
-                        goToCartIcon($addTocart);
-                    },
-                    afterAddOnCart: function (products, totalPrice, totalQuantity) {
-                        console.log("afterAddOnCart", products, totalPrice, totalQuantity);
-                    },
-                    clickOnCartIcon: function ($cartIcon, products, totalPrice, totalQuantity) {
-                        console.log("cart icon clicked", $cartIcon, products, totalPrice, totalQuantity);
-                    },
-                    checkoutCart: function (products, totalPrice, totalQuantity) {
-                        var checkoutString = "Total Price: " + totalPrice + "\\nTotal Quantity: " + totalQuantity;
-                        checkoutString += "\\n\n id \t name \t summary \t price \t quantity \t image path";
-                        $.each(products, function () {
-                            checkoutString += ("\\n " + this.id + " \t " + this.name + " \t " + this.summary + " \t " + this.price + " \t " + this.quantity + " \t " + this.image);
-                        });
-                        alert(checkoutString)
-                        console.log("checking out", products, totalPrice, totalQuantity);
-                    },
-                    getDiscountPrice: function (products, totalPrice, totalQuantity) {
-                        console.log("calculating discount", products, totalPrice, totalQuantity);
-                        return totalPrice * 0.5;
-                    }
-                });
-            });

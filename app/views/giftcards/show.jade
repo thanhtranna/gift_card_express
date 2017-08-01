@@ -10,15 +10,15 @@ block content
     p Price #{giftcard.maxPrice}
     p Expires date: #{giftcard.expiresAt}
     -if (giftcard.status == 0)
-        p Tinh trang: Chua public
+        p Status: Private
     - else if (giftcard.status == 1)
-        p Tinh trang: Da public
+        p Status: Ready to sell
     - else
-        p Tinh trang: Da ban
+        p Status: Solid
     - if (giftcard.authGift == 0)
-        p Gift card chua xac thuc
+        p Gift card not authencation yet.
     - else
-        p Gift card da xac thuc
+        p Gift card validated success
 
     - if (req.isAuthenticated())
         - if ((req.user._id+"" != giftcard.user._id+""))
@@ -27,7 +27,7 @@ block content
                     // onsubmit="return confirm('Do you want to buy this gift card?')"
                     input(type='hidden', name='_csrf', value='#{ csrf_token }')
                     input(type='hidden', name='giftId', value="#{ giftcard._id }")
-                    input.form(type='text', name='price', value="", placeholder='Enter price you want buy!' )
+                    input.form(type='number', name='price', value="", placeholder='Enter price you want buy!' )
                     button.btn.btn-info(type="submit") ORDER
         - else
             form(action="/giftcards/" + giftcard._id, method="post", onsubmit="return confirm('Are you sure?')")

@@ -15,8 +15,6 @@ const { respond, respondOrRedirect } = require('../utils');
  * @param res
  */
 
-
-
 exports.add = async(function*(req, res) {
     const idCart = req.params.idCart;
     console.log('ID Cart: ', idCart);

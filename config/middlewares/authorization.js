@@ -36,7 +36,7 @@ exports.user = {
 
 exports.admin = {
     hasAuthorization: function (req, res, next) {
-        console.log('Req user: ', req.user);
+        // console.log('Req user: ', req.user);
         if (req.user && req.user.admin == true) {
             req.session.returnTo = '/admin';
             next();
@@ -83,7 +83,8 @@ exports.comment = {
  */
 
 exports.giftcard = {
-    hasAuthorization: async (function* (req, res, next) {
+    // Authencation GiftCard.
+    hasAuthorization: async(function*(req, res, next) {
         const giftcard = yield Giftcards.load(req.param('giftId'));
         if (giftcard.user._id + '' != req.user._id + '') {
             req.flash('info', 'You are not authorized');
@@ -91,7 +92,8 @@ exports.giftcard = {
         }
         next();
     }),
-    editGiftcard: async (function* (req, res, next) {
+    // GiftCard wait authencation by admin.
+    editGiftcard: async(function*(req, res, next) {
         const giftcard = yield Giftcards.load(req.param('giftId'));
         if (giftcard.status != 0) {
             req.flash('info', 'You cannot edit when selling...');

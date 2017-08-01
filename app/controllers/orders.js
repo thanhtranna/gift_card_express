@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
-const { respond , respondOrRedirect } = require('../utils');
+const { respond, respondOrRedirect } = require('../utils');
 const Order = mongoose.model('Orders');
 const Giftcards = mongoose.model('GiftCards');
 
 /**
  * Order
  */
+
 exports.order = async(function (req, res) {
     const order = new Order();
+    // Set fields order.
     order.giftcard = req.body.giftId;
     order.price = req.body.price;
     order.user = req.user;
@@ -28,7 +30,11 @@ exports.order = async(function (req, res) {
     }
 });
 
-exports.index = async(function* (req, res) {
+/**
+ * Show index order.
+ */
+
+exports.index = async(function*(req, res) {
     const options = {
         user: req.user._id
     };
@@ -39,8 +45,11 @@ exports.index = async(function* (req, res) {
     });
 });
 
+/**
+ * Show information sell Order.
+ */
 
-exports.sellOrder = async(function* (req, res) {
+exports.sellOrder = async(function*(req, res) {
     const options = {
         user: req.user._id
     };
@@ -58,7 +67,7 @@ exports.sellOrder = async(function* (req, res) {
  *  Buy Order adn render form.
  */
 
-exports.buyOrder = async(function* (req, res) {
+exports.buyOrder = async(function*(req, res) {
     const options = {
         user: req.user._id
     };
@@ -70,13 +79,14 @@ exports.buyOrder = async(function* (req, res) {
 });
 
 /**
- * Clear order when user do not buy giftcard.
+ * Clear order when user don't want buy giftcard.
  */
 
-exports.clearOrder = async(function* (req, res) {
+exports.clearOrder = async(function*(req, res) {
     const options = {
         _id: req.body.orderId
     };
+    // Remove document order.
     if (yield Order.clearOrder(options)) {
         respondOrRedirect({ req, res }, '/orders/buy-order', {}, {
             type: 'success',
