@@ -17,9 +17,9 @@ const User = mongoose.model('Users');
  */
 
 exports.load = async(function*(req, res, next, _id) {
-    const criteria = { _id };
+    const options = { _id };
     try {
-        req.profile = yield User.load({ criteria });
+        req.profile = yield User.load({ options });
         if (!req.profile) return next(new Error('User not found'));
     } catch (err) {
         return next(err);
@@ -40,7 +40,6 @@ exports.create = async(function*(req, res) {
         req.logIn(user, err => {
             if (err) req.flash('info', 'Sorry! We are not able to log you in!');
             // Response and redirect homepage.
-            console.log('Dang Nhap thanh cong.');
             return respondOrRedirect({ req, res }, '/', {}, {
                 type: 'success',
                 text: 'Awesome! Login successfully!'
@@ -49,7 +48,6 @@ exports.create = async(function*(req, res) {
     } catch (err) {
         const errors = Object.keys(err.errors)
             .map(field => err.errors[field].message);
-
         respond(res, 'users/signup', {
             title: 'Sign up',
             errors,
@@ -62,10 +60,15 @@ exports.create = async(function*(req, res) {
  *  Show profile
  */
 
-exports.show = async(function* (req, res) {
+exports.show = async(function*(req, res) {
+    // const options = {
+    //     _id: req.profile._id
+    // };
     const options = {
-        _id: req.profile._id
+        _id: req.user._id
     };
+    // Load User by id.
+    console.log(req.user._id);
     const user = yield User.loadUserById(options);
     respond(res, 'users/show', {
         title: 'Information user.',
@@ -77,7 +80,7 @@ exports.show = async(function* (req, res) {
  *  Update information user.
  */
 
-exports.updateUser = async(function* (req, res) {
+exports.updateUser = async(function*(req, res) {
     // Options when update information user.
     const options = {
         _id: req.param('userId')
@@ -85,10 +88,14 @@ exports.updateUser = async(function* (req, res) {
     const user = yield User.loadUserById(options);
     user.name = req.body.name;
     if (user.saveUser()) {
-        console.log();
         return respondOrRedirect({ req, res }, '/', {}, {
             type: 'success',
             text: 'Update information user successfully.'
+        });
+    } else {
+        return respondOrRedirect({ req, res }, '/users/' + user._id, {}, {
+            type: 'errors',
+            text: 'Update information user failed!!'
         });
     }
 });

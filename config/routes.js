@@ -18,6 +18,7 @@ const orders = require('../app/controllers/orders');
 const categories = require('../app/controllers/admin/categories');
 const giftcards = require('../app/controllers/giftcards');
 const index = require('../app/controllers/index');
+const cart = require('../app/controllers/cart');
 const giftCardsAdmin = require('../app/controllers/admin/giftcards');
 // const transactionsAdmin = require('../app/controllers/admin/transaction');
 const transactions = require('../app/controllers/transactions');
@@ -44,7 +45,7 @@ const fail = {
  */
 
 module.exports = function (app, passport) {
-    
+
     const pauth = passport.authenticate.bind(passport);
 
     // admin routes
@@ -75,7 +76,7 @@ module.exports = function (app, passport) {
     app.put('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
 
     // router shopping cart.
-    app.get('/add-to-cart/:idCart', auth.requiresLogin);
+    app.get('/add-to-cart/:idCart', auth.requiresLogin, cart.add);
 
     // user routes
     app.get('/login', users.login);
@@ -99,26 +100,35 @@ module.exports = function (app, passport) {
             scope: ['email', 'user_about_me'],
             failureRedirect: '/login'
         }), users.signin);
-    app.get('/auth/facebook/callback', pauth('facebook', fail), users.authCallback);
+    app.get('/auth/facebook/callback',
+        pauth('facebook', {
+            failureRedirect: '/login',
+            successRedirect: '/',
+            scope: [
+                'email'
+            ]
+        }), users.authCallback);
     app.get('/auth/github', pauth('github', fail), users.signin);
-    app.get('/auth/github/callback', pauth('github', fail), users.authCallback);
+    app.get('/auth/github/callback',
+        pauth('github', {
+            failureRedirect: '/login',
+            successRedirect: '/',
+            scope: [
+                'email'
+            ]
+        }), users.authCallback);
     app.get('/auth/twitter', pauth('twitter', fail), users.signin);
     app.get('/auth/twitter/callback', pauth('twitter', fail), users.authCallback);
     app.get('/auth/google',
         pauth('google', {
-            failureRedirect: '/login',
-            scope: [
-                'https://www.googleapis.com/auth/userinfo.profile',
-                'https://www.googleapis.com/auth/userinfo.email'
-            ]
+            fail,
+            scope : ['profile', 'email']
         }), users.signin);
     app.get('/auth/google/callback', pauth('google', fail), users.authCallback);
     app.get('/auth/linkedin',
         pauth('linkedin', {
-            failureRedirect: '/login',
-            scope: [
-                'r_emailaddress'
-            ]
+            fail,
+            scope: ['r_basicprofile', 'r_emailaddress']
         }), users.signin);
     app.get('/auth/linkedin/callback', pauth('linkedin', fail), users.authCallback);
 

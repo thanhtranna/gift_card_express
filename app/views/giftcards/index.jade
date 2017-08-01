@@ -16,7 +16,7 @@ block content
                 a(href="/users/" + item.user._id)= name
             h4
                 //a.btn.btn-success(href='/add-to-cart/'+item._id) Add to Shopping Cart
-                button.btn.btn-primary.my-cart-btn(data-id=item._id, data-name=item.category.name, data-summary='summary 5', data-price=item.maxPrice, data-quantity='1', data-image='') Add to Cart
+                a.btn.btn-primary.my-cart-btn(href='/add-to-cart/#{item._id}') Add to Cart
     - else
         - if(req.isAuthenticated())
             h4.muted No Giftcard.&nbsp;
