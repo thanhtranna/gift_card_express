@@ -4,7 +4,7 @@ const path = require('path');
 const pathName = path.join((process.cwd() + ' ').trim(), '/app/utils');
 const { respond, respondOrRedirect } = require(pathName);
 const GiftCards = mongoose.model('GiftCards');
-// const Categories = mongoose.model('Categories');
+const Order = mongoose.model('Orders');
 
 /**
  * List gift cards
@@ -18,6 +18,17 @@ exports.index = async(function*(req, res) {
     respond(res, 'admin/giftcards/index', {
         title: 'List Gift cards',
         giftcards: giftcards,
+    });
+});
+
+/**
+ * show detail giftcard by id.
+ */
+exports.show = async(function* (req, res) {
+    const giftcards = yield GiftCards.load(req.param('giftId'));
+    respond(res, 'admin/giftcard/show', {
+        title: 'Show gift card detail',
+        giftcards: giftcards
     });
 });
 

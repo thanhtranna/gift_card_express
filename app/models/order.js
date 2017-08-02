@@ -15,6 +15,7 @@ const Schema = mongoose.Schema;
 const OrdersSchema = new Schema({
     giftcard: { type: Schema.ObjectId, ref: 'GiftCards' },
     price: { type: String, default: '0', trim: true },
+    userSell: { type: Schema.ObjectId, ref: 'Users' },
     user: { type: Schema.ObjectId, ref: 'Users' },
     bought: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
@@ -85,6 +86,7 @@ OrdersSchema.statics = {
             .populate([
                 { path: 'user', select: 'name username' },
                 { path: 'giftcard', select: '_id name description image status' }])
+            // .where('giftcard.status').in(['1', '2'])
             .where(condition)
             .in(arrIn);
     }

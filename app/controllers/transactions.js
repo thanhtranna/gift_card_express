@@ -15,11 +15,18 @@ exports.transaction = async(function*(req, res) {
     transaction.user = order.user;
     transaction.description = 'Type: Order, User order: ' + order.user.name;
     transaction.order = order;
+    transaction.giftcard = order.giftcard;
     /*  Set field bought = 1.
-        0: Not sold yet
-        1: Sold
-    */
+     0: Not sold yet
+     1: Sold
+     */
     order.bought = 1;
+    /* Change status of giftcard.
+     Set field status.
+     0: wait to verify.
+     1: ready sell
+     2: Sold
+     */
     const giftcard = order.giftcard;
     giftcard.status = 2;
     try {

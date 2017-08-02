@@ -20,7 +20,7 @@ const giftcards = require('../app/controllers/giftcards');
 const index = require('../app/controllers/index');
 const cart = require('../app/controllers/cart');
 const giftCardsAdmin = require('../app/controllers/admin/giftcards');
-// const transactionsAdmin = require('../app/controllers/admin/transaction');
+const transactionsAdmin = require('../app/controllers/admin/transactions');
 const transactions = require('../app/controllers/transactions');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
@@ -57,9 +57,9 @@ module.exports = function (app, passport) {
     app.post('/admin/user/profile', adminAuth, adminUser.updateAdminById);
     app.post('/admin/user/edit/:userId', adminAuth, adminUser.updateUserById);
     app.post('/admin/user/delete', adminAuth, adminUser.deleteUserById);
-    app.get('/admin/listgift', adminUser.listgift);
-    app.get('/admin/listgift/:giftId', adminUser.show);
-    app.get('/admin/transaction', transactions.transaction);
+    app.get('/admin/listgift', adminAuth, adminUser.listgift);
+    app.get('/admin/listgift/:giftId', adminAuth, adminUser.show);
+    app.get('/admin/transaction', adminAuth, transactionsAdmin.index);
 
     // category routes. admin permission
     app.get('/admin/categories/', adminAuth, categories.index);
@@ -73,7 +73,11 @@ module.exports = function (app, passport) {
     // Router authenticate gift card.
     app.get('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
     app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
+    app.get('/admin/giftcards/:giftId', adminAuth, giftCardsAdmin.show);
     app.put('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
+
+    // Router admin transaction.
+    // app.get('/admin/transaction', adminAuth, transactionsAdmin.index);
 
     // router shopping cart.
     app.get('/add-to-cart/:idCart', auth.requiresLogin, cart.add);
