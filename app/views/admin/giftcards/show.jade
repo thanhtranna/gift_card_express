@@ -1,3 +1,72 @@
-//
-   Created by tranthanhit on 02/08/2017.
+//Created by tranthanhit on 02/08/2017.
+extends ../layouts/default
 
+block main
+    h1= title
+
+block content
+    h3= giftcard.name
+    p Description: #{giftcard.description}
+    //p Min price:  #{giftcard.minPrice}
+    p Price #{giftcard.maxPrice}
+    p Expires date: #{giftcard.expiresAt}
+    -if (giftcard.status == 0)
+        p Status: Private
+    - else if (giftcard.status == 1)
+        p Status: Ready to sell
+    - else
+        p Status: Solid
+    - if (giftcard.authGift == 0)
+        p Gift card not authencation yet.
+    - else
+        p Gift card validated success
+
+    - if (req.isAuthenticated())
+        - if ((req.user._id+"" != giftcard.user._id+""))
+            - if ((giftcard.status == 1) && (giftcard.authGift == 1))
+                form(action="/giftcards/confirm-buy", method="post")
+                    // onsubmit="return confirm('Do you want to buy this gift card?')"
+                    input(type='hidden', name='_csrf', value='#{ csrf_token }')
+                    input(type='hidden', name='giftId', value="#{ giftcard._id }")
+                    input.form(type='number', name='price', value="", placeholder='Enter price you want buy!' )
+                    button.btn.btn-info(type="submit") ORDER
+        - else
+            form(action="/giftcards/" + giftcard._id, method="post", onsubmit="return confirm('Are you sure?')")
+                input(type='hidden', name='_csrf', value="#{ csrf_token }")
+                - if (giftcard.status == 0)
+                    a.btn.btn-default(href='/giftcards/' + giftcard._id + '/edit', title="edit") Edit
+                    input(type="hidden", name="_method", value="DELETE")
+                    button.btn.btn-danger(type="submit") Delete
+                h3 List order
+            - if ( giftcardOrders.length )
+                table.table.table-hover
+                    thead
+                        tr
+                            th STT
+                                th Custommer
+                                th Price order
+                                th Time
+                                th Action
+                        tbody
+                            -each item, i in giftcardOrders
+                                tr
+                                    td= i
+                                    td= item.user.name
+                                    td= item.price
+                                    td= item.createdAt
+                                    td
+                                        form(action='/transactions/order', method="post")
+                                            input(type="hidden", name="_csrf", value="#{csrf_token}")
+                                            input(type="hidden", name="orderId", value="#{item._id}")
+                                            - if (item.giftcard.status == 2)
+                                                - if (item.bought == 0)
+                                                    span Sold
+                                                - else
+                                                    span.btn-success Sold
+                                            - else
+                                                button.btn.btn-info(type="submit") Sell
+            - else
+                h4 No User order
+    - else
+        h4
+            a.btn.btn-primary(href="/login") Login and Buy now

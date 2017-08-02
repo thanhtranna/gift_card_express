@@ -34,8 +34,8 @@ block content
                 input(type='hidden', name='_csrf', value="#{ csrf_token }")
                 - if (giftcard.status == 0)
                     a.btn.btn-default(href='/giftcards/' + giftcard._id + '/edit', title="edit") Edit
-                input(type="hidden", name="_method", value="DELETE")
-                button.btn.btn-danger(type="submit") Delete
+                    input(type="hidden", name="_method", value="DELETE")
+                    button.btn.btn-danger(type="submit") Delete
                 h3 List order
             - if ( giftcardOrders.length )
                 table.table.table-hover

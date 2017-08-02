@@ -11,17 +11,17 @@ block content
                     .thumbnail
                         .caption
                             p.description
-                                strong Category
+                                strong Category: #{transaction.giftcard.name}
                             p.description
-                                strong User Buy:
+                                strong User Buy: #{transaction.user.name}
 
                             p.description
                                 strong User sell:
 
                             p.description
-                                strong Price:
+                                strong Price: #{transaction.order.price}
 
                             p.description
                                 | Description:
-                                strong #{transaction.descriptions}
+                                strong #{transaction.description}
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
-const { respond } = require('../utils');
+const { respond } = require('../../utils');
 const Transactions = mongoose.model('Transactions');
 
 /**

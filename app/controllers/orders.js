@@ -64,7 +64,7 @@ exports.sellOrder = async(function*(req, res) {
 });
 
 /**
- *  Buy Order adn render form.
+ *  Buy Order and render form.
  */
 
 exports.buyOrder = async(function*(req, res) {

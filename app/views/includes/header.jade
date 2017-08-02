@@ -7,40 +7,40 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
                 span.icon-bar
                 span.icon-bar
             a.navbar-brand(href='/') Home
-        //.collapse.navbar-collapse
-        if (req.isAuthenticated())
-            ul.nav.navbar-nav
-                li
-                    a(href="/giftcards", title="List gift card") My Gift card
-                li
-                    a(href="/orders/sell-order", title="Profile") List sell order
-                li
-                    a(href="/orders/buy-order", title="List buy order") List buy order
-            ul.nav.navbar-nav.navbar-right
-                li
-                    //a(href='/shopping-cart/')
-                    span.badge.badge-notify.my-cart-badge.pull-right=cart? cart.totalQty : 0
-                    i.fa.fa-shopping-cart.my-cart-icon.fa-2x(style='margin-right: 5px; float: right; cursor: pointer; padding-top: 13px;')
-                li(style='cursor: pointer;')
-                    a.user-profile.dropdown-toggle(data-toggle='dropdown', aria-expanded='true')
-                        img(src='/img/user.jpg', alt='', style='width: 30px; height: 30px; line-height: 32px; border-radius: 50%; margin-right: 10px;')
-                        | #{req.user.name} &nbsp;
-                        span.fa.fa-angle-down
-                    ul.dropdown-menu.dropdown-usermenu.pull-right
-                        li
-                            a(href='/users/' + req.user.id)  Profile
-                        li
-                            a(href='/logout')
-                                i.fa.fa-sign-out.pull-right
-                                |  Log Out
-        else
-            ul.nav.navbar-nav
-                li(class=isActive('/login') ? 'active' : '')
-                    a(href="/login", title="Login") Login
+        .collapse.navbar-collapse
+            if (req.isAuthenticated())
+                ul.nav.navbar-nav
+                    li
+                        a(href="/giftcards", title="List gift card") My Gift card
+                    li
+                        a(href="/orders/sell-order", title="Profile") List sell order
+                    li
+                        a(href="/orders/buy-order", title="List buy order") List buy order
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        //a(href='/shopping-cart/')
+                        span.badge.badge-notify.my-cart-badge.pull-right=cart? cart.totalQty : 0
+                        i.fa.fa-shopping-cart.my-cart-icon.fa-2x(style='margin-right: 5px; float: right; cursor: pointer; padding-top: 13px;')
+                    li(style='cursor: pointer;')
+                        a.user-profile.dropdown-toggle(data-toggle='dropdown', aria-expanded='true')
+                            img(src='/img/user.jpg', alt='', style='width: 30px; height: 30px; line-height: 32px; border-radius: 50%; margin-right: 10px;')
+                            | #{req.user.name} &nbsp;
+                            span.fa.fa-angle-down
+                        ul.dropdown-menu.dropdown-usermenu.pull-right
+                            li
+                                a(href='/users/' + req.user.id)  Profile
+                            li
+                                a(href='/logout')
+                                    i.fa.fa-sign-out.pull-right
+                                    |  Log Out
+            else
+                ul.nav.navbar-nav
+                    li(class=isActive('/login') ? 'active' : '')
+                        a(href="/login", title="Login") Login
 
-        if (req.isAuthenticated())
-            //form.nav.navbar-form.navbar-right.search-form(action='')
-            //  .form-group.has-feedback
-            //    //label.sr-only(for='search') Search
-            //    input#search.form-control(type='text', name='search', placeholder='Search')
-            //    span.glyphicon.glyphicon-search.form-control-feedback
+            if (req.isAuthenticated())
+                //form.nav.navbar-form.navbar-right.search-form(action='')
+                //  .form-group.has-feedback
+                //    //label.sr-only(for='search') Search
+                //    input#search.form-control(type='text', name='search', placeholder='Search')
+                //    span.glyphicon.glyphicon-search.form-control-feedback

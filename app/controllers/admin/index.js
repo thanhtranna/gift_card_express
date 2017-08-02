@@ -246,7 +246,7 @@ exports.listgift = async(function* (req, res) {
 });
 
 /**
- * show detail
+ * show detail giftcard by id.
  */
 exports.show = async(function* (req, res) {
     const giftcards = yield GiftCard.load(req.param('giftId'));

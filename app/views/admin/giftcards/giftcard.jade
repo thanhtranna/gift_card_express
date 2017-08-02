@@ -5,7 +5,7 @@ giftcard.giftcard
     - if (item.user)
         span Poster: &nbsp;
         - var name = item.user.name ? item.user.name : item.user.username
-        a(href="/users/" + item.user._id)= name
+        a(href="/admin/user/edit/" + item.user._id)= name
 
     form(action="/giftcards/" + item._id, method="post", onsubmit="return confirm('Are you sure?')")
         input(type='hidden', name='_csrf', value="#{ csrf_token }")
