@@ -238,6 +238,7 @@ exports.forgotPassword = (req, res, next) => {
  */
 
 exports.reset = (req, res) => {
+    // Find user by token and expries.
     User.findOne({
         resetPasswordToken: req.params.token,
         resetPasswordExpires: {
@@ -343,8 +344,7 @@ exports.session = login;
  */
 
 function login (req, res) {
-    console.log('Req session: ');
-    console.log(req.session);
+    console.log('Req session: ', req.session);
     const redirectTo = req.session.returnTo
         ? req.session.returnTo
         : '/';
