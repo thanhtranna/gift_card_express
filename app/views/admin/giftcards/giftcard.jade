@@ -7,7 +7,7 @@ giftcard.giftcard
         - var name = item.user.name ? item.user.name : item.user.username
         a(href="/admin/user/edit/" + item.user._id)= name
 
-    form(action="/giftcards/" + item._id, method="post", onsubmit="return confirm('Are you sure?')")
+    form(action="/admin/giftcards/" + item._id, method="post", onsubmit="return confirm('Are you sure?')")
         input(type='hidden', name='_csrf', value="#{ csrf_token }")
         - if (item.status != 2)
             - if (item.authGift == 0)

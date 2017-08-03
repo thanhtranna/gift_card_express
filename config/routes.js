@@ -99,7 +99,7 @@ module.exports = function (app, passport) {
     app.get('/admin/giftcards', adminAuth, giftCardsAdmin.index);
     app.get('/admin/giftcards/:giftId', adminAuth, giftCardsAdmin.show);
     app.put('/admin/giftcards/:giftId/auth_gift', adminAuth, giftCardsAdmin.authGift);
-
+    app.delete('/admin/giftcards/:giftId', adminAuth, giftCardsAdmin.deleteGift);
     // Router admin transaction.
     // app.get('/admin/transaction', adminAuth, transactionsAdmin.index);
 

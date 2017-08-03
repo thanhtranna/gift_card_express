@@ -59,3 +59,14 @@ exports.authGift = async(function* (req, res) {
 });
 
 
+exports.deleteGift = async(function*(req, res) {
+    console.log(req.param('giftId'));
+    const giftcard = yield GiftCards.load(req.param('giftId'));
+    giftcard.remove();
+    respondOrRedirect({ req, res }, '/admin/giftcards', {}, {
+        type: 'success',
+        text: 'Deleted giftcard successfully'
+    });
+
+});
+
