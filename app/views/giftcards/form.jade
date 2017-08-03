@@ -8,7 +8,7 @@ block content
     - action += giftcard.isNew ? '' : '/' + giftcard._id
     .row
         .col-md-8
-            form.form-horizontal(method="post", action=action, role="form", enctype='multipart/form-data')
+            form.form-horizontal(method="post", action=action, role="form", enctype="multipart/form-data")
                 input(type="hidden", name="_csrf", value="#{csrf_token}")
                 - if (!giftcard.isNew)
                     input(type="hidden", name="_method", value="PUT")

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { wrap: async } = require('co');
+const path = require('path');
 const { respond, respondOrRedirect } = require('../utils');
 const GiftCards = mongoose.model('GiftCards');
 const Categories = mongoose.model('Categories');
@@ -10,6 +11,7 @@ const Order = mongoose.model('Orders');
  */
 
 exports.index = async(function*(req, res) {
+    console.log(path.join((process.cwd() + ' ').trim(), '/uploads'));
     console.log('Req User: ', req.user);
     // List giftcards with status = 1 and without giftcard of current user.
     const options = {

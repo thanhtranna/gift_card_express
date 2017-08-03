@@ -6,6 +6,8 @@
 
 const csrf = require('csurf');
 const flash = require('express-flash');
+const multer = require('multer');
+const path = require('path');
 
 /**
  *  Require file.
@@ -40,6 +42,28 @@ const fail = {
     failureRedirect: '/login'
 };
 
+// Code upload file.
+
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, path.join((process.cwd() + ' ').trim(), '/uploads/'));
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + Date.now());
+    }
+});
+
+var upload = multer({
+        storage: storage,
+        fileFilter: function (req, file, callback) {
+            var ext = path.extname(file.originalname);
+            if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+                return callback('Only images are allowed', null);
+            }
+            callback(null, true);
+        }
+    });
+
 /**
  * Expose routes
  */
@@ -61,10 +85,10 @@ module.exports = function (app, passport) {
     app.get('/admin/listgift/:giftId', adminAuth, adminUser.show);
     app.get('/admin/transaction', adminAuth, transactionsAdmin.index);
 
-    // category routes. admin permission
+    // category routes. admin permission.
     app.get('/admin/categories/', adminAuth, categories.index);
     app.get('/admin/categories/new', adminAuth, categories.new);
-    app.post('/admin/categories', adminAuth, categories.create);
+    app.post('/admin/categories', adminAuth,  upload.single('image'), categories.create);
     app.get('/admin/categories/:catId', adminAuth, categories.show);
     app.get('/admin/categories/:catId/edit', adminAuth, categories.edit);
     app.put('/admin/categories/:catId', adminAuth, categories.update);
@@ -97,8 +121,8 @@ module.exports = function (app, passport) {
             failureFlash: 'Invalid email or password.'
         }), users.session);
     // Show information user.
-    app.get('/users/:userId', users.show);
-    app.put('/users/:userId', users.updateUser);
+    app.get('/users/:userId', auth.requiresLogin, users.show);
+    app.put('/users/:userId', auth.requiresLogin, users.updateUser);
     app.get('/auth/facebook',
         pauth('facebook', {
             scope: ['email', 'user_about_me'],
@@ -126,7 +150,7 @@ module.exports = function (app, passport) {
     app.get('/auth/google',
         pauth('google', {
             fail,
-            scope : ['profile', 'email']
+            scope: ['profile', 'email']
         }), users.signin);
     app.get('/auth/google/callback', pauth('google', fail), users.authCallback);
     app.get('/auth/linkedin',
