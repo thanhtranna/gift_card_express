@@ -13,7 +13,8 @@ block content
             - if (item.user)
                 span Poster: &nbsp;
                 - var name = item.user.name ? item.user.name : item.user.username
-                a(href="/users/" + item.user._id)= name
+                a(href="#")= name
+                //a(href="/users/" + item.user._id)= name
             h4
                 //a.btn.btn-success(href='/add-to-cart/'+item._id) Add to Shopping Cart
                 a.btn.btn-primary.my-cart-btn(href='/add-to-cart/#{item._id}') Add to Cart

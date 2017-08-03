@@ -62,13 +62,13 @@ exports.create = async(function*(req, res) {
 
 exports.show = async(function*(req, res) {
     // const options = {
-    //     _id: req.profile._id
+    //     _id: req.params.userId
     // };
     const options = {
         _id: req.user._id
     };
     // Load User by id.
-    console.log(req.user._id);
+    // console.log(req.user._id);
     const user = yield User.loadUserById(options);
     respond(res, 'users/show', {
         title: 'Information user.',
